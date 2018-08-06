@@ -14,9 +14,9 @@ public class subsetSum {
         for (int i = 0; i < n; i++) {
             A[i][0] = 1;
         }
-        for (int j = 0; j <= t; j++) {
-            if (s[1] == 1) {
-                A[1][j] = 1;
+        for (int j = 1; j <= t; j++) {
+            if (s[0] == j) {
+                A[0][j] = 1;
             } else {
                 A[1][j] = 0;
             }
@@ -35,7 +35,7 @@ public class subsetSum {
             }
         }
 
-        String found = (A[n-1][t] == 1) ? "true" : "true";
+        String found = (A[n-1][t] == 1) ? "true" : "false";
         System.out.println(found);
 
         return A;
@@ -43,24 +43,44 @@ public class subsetSum {
 
     /**
      *
-     * @param list dynamic solution array to search
+     * @param A dynamic solution array to search
      * @param t target sum
      * @return if found or not
      */
-    public boolean subsetSumRecover(int list[][], int t) {
-        boolean found = false;
+    public String subsetSumRecover(int A[][], int list[], int t) {
+        String found = "found = ", sequence = " ";
+        int n = A.length;
+        found += (A[n-1][t] == 1) ? "true" : "false";
 
+        //recover from the matrix
+        int b = A.length - 1;     /// This method not working yet
+        while (b > 0 && t > 0) {
+            while (A[b][t] == 1) {
+                b--;
+                if (b == 0) {
+                    sequence += list[b];
+                    sequence += " ";
+                }
+            t = t - A[b+1][0];
+            sequence += list[b];
+            sequence += " ";
+            }
+        }
 
-        return found;
+        return found + ", sequence:" + sequence;
     }
 
     public static void main(String[] args) {
         subsetSum sub = new subsetSum();
-        int list[] = {2, 3, 6, 1, 4};
-        int target = 8;
+//        int list[] = {2, 3, 6, 1, 4};
+//        int target = 8;
+
+        int list[] = {2, 3, 5, 7, 9}; // 7, 3, 4 is the solution
+        int target = 12;
         int dynamic[][];
         dynamic = sub.has_subSet(list, target);
 
+        System.out.println(sub.subsetSumRecover(dynamic, list, target));
 
 
         for (int i = 0; i<dynamic.length; i++) {
