@@ -16,6 +16,8 @@ public class Main {
 //        startingValues.add(2);
 //        startingValues.add(3);
 //        startingValues.add(4);
+
+        //This will get the power set.
         ArrayList<ArrayList<Integer>> powerSet = printSubsets(startingValues);
 
         for (int i = 0; i < powerSet.size(); i++) {
@@ -49,12 +51,27 @@ public class Main {
 
     }
 
+    /**
+     * This will allow us to get the shortest path between all possible nodes.
+     * \
+     * @param powerSet
+     * @param matrix
+     * @return
+     */
     private static int getShortestPath(ArrayList<ArrayList<Integer>> powerSet, int [][] matrix) {
+        //This will hold the smallest sublist/path of nodes to the end.
         int smallestIndex = 0;
+
+        //Total minimum between all subsets/paths.
         int minimum = 99999999;
+
         for (int i = 0; i < powerSet.size(); i++) {
+            //This will allow us to update our current index of the smallest path.
             int currentIndex = i;
+            //Current cost of the current subset.
             int currentCost = 0;
+
+            //This will allow us to map for example(0,1)-> (1, 2) which would be (0,1)-> ((1=LastValue), 2) -> ((2=LastValue), 3)
             int LastValue = 0;
             //This will add in the 0, 0 cost.
             for (int j = 0; j < powerSet.get(i).size(); j++) {
@@ -62,9 +79,12 @@ public class Main {
                 System.out.println("The Cost: " + currentCost + " Index 1: " + LastValue + " Index 2: " + powerSet.get(i).get(j));
                 LastValue = powerSet.get(i).get(j);
             }
+            //This allows for us to exit out of the last node. In example given would be three.
             currentCost += matrix[LastValue][matrix[0].length - 1];
             System.out.println("The Cost: " + currentCost + " Index 1: " + LastValue + " Index 2: " + (matrix[0].length - 1));
             System.out.println();
+
+            //This will check if global minimum between sets needs to be updated.
             if (minimum > currentCost) {
                 minimum = currentCost;
                 //Set smallest index.
@@ -75,6 +95,12 @@ public class Main {
     return smallestIndex;
     }
 
+    /**
+     * This will get the first row of the matrix allowing us to see the total amount of subsets we can make.
+     *
+     * @param theMatrix
+     * @return
+     */
     public static ArrayList<Integer> getFirstRow(int [][] theMatrix) {
         ArrayList<Integer> set = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
@@ -86,6 +112,13 @@ public class Main {
         }
         return set;
     }
+
+    /**
+     * This will get the power set.
+     *
+     * @param set
+     * @return
+     */
     static ArrayList<ArrayList<Integer>> printSubsets(ArrayList<Integer> set)
     {
         ArrayList<ArrayList<Integer>> MainPowerSet = new ArrayList<>();
