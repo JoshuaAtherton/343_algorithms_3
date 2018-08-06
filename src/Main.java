@@ -22,7 +22,20 @@ public class Main {
             System.out.println("AFTER:" + powerSet.get(i));
         }
 
-        getShortestPath(powerSet);
+        int shortestIndex = getShortestPath(powerSet, matrix);
+        System.out.println("AFTER:" + powerSet.get(shortestIndex));
+
+        //Prints shortest Path
+        for (int i = shortestIndex; i <= shortestIndex; i++) {
+            System.out.print("0 -> ");
+            for (int j = 0; j < powerSet.get(i).size(); j++) {
+                System.out.print(powerSet.get(i).get(j)+ " ->");
+
+            }
+            System.out.print(" " + (matrix[0].length - 1));
+            System.out.println();
+        }
+//        System.out.println(powerSet.get(shortestIndex));
 
 
 
@@ -36,14 +49,30 @@ public class Main {
 
     }
 
-    private static int getShortestPath(ArrayList<ArrayList<Integer>> powerSet) {
+    private static int getShortestPath(ArrayList<ArrayList<Integer>> powerSet, int [][] matrix) {
+        int smallestIndex = 0;
+        int minimum = 99999999;
         for (int i = 0; i < powerSet.size(); i++) {
+            int currentIndex = i;
+            int currentCost = 0;
+            int LastValue = 0;
+            //This will add in the 0, 0 cost.
             for (int j = 0; j < powerSet.get(i).size(); j++) {
-                System.out.println(powerSet.get(i).get(j));
+                currentCost += matrix[LastValue][powerSet.get(i).get(j)];
+                System.out.println("The Cost: " + currentCost + " Index 1: " + LastValue + " Index 2: " + powerSet.get(i).get(j));
+                LastValue = powerSet.get(i).get(j);
+            }
+            currentCost += matrix[LastValue][matrix[0].length - 1];
+            System.out.println("The Cost: " + currentCost + " Index 1: " + LastValue + " Index 2: " + (matrix[0].length - 1));
+            System.out.println();
+            if (minimum > currentCost) {
+                minimum = currentCost;
+                //Set smallest index.
+                smallestIndex = currentIndex;
 
             }
         }
-    return 0;
+    return smallestIndex;
     }
 
     public static ArrayList<Integer> getFirstRow(int [][] theMatrix) {
