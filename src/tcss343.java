@@ -5,7 +5,8 @@ Joshua Atherton | Armoni Atherton
  */
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Scanner;
+import java.io.*;
 
 /**
  * Homework for solves the coin change problem using 3 different algorithm approaches
@@ -23,11 +24,12 @@ public class tcss343 {
     public ArrayList<Integer> bruteForce(int[][] matrix) {
         ArrayList<Integer> result = new ArrayList<>(); // hold value to return
         ArrayList<Integer> startingValues = getFirstRow(matrix);
-        ArrayList<ArrayList<Integer>> powerSet = printSubsets(startingValues);
+        ArrayList<ArrayList<Integer>> powerSet = findMinSubset(startingValues);
         ArrayList<Integer> shortestPath = getShortestPath(powerSet, matrix);
 
         System.out.println("Brute force: ");
         System.out.println("Total Cost: " + shortestPath.get(0));
+        System.out.print("Path: ");
 
         result.add(shortestPath.get(0));
         //Prints the shortest Path
@@ -72,7 +74,7 @@ public class tcss343 {
 
         ArrayList<Integer> costAndPath = new ArrayList<>();
         //This will hold the smallest sublist/path of nodes to the end.
-        int smallestIndex = 0;
+        int minSubsetIndex = 0;
 
         //Total minimum between all subsets/paths.
         int minimumCost = 99999999;
@@ -98,13 +100,13 @@ public class tcss343 {
             if (minimumCost > currentCost) {
                 minimumCost = currentCost;
                 //Set smallest index.
-                smallestIndex = currentSubsetIndex;
+                minSubsetIndex = currentSubsetIndex;
             }
         }
         //Minimum Cost.
         costAndPath.add(minimumCost);
         //Shortest Path
-        costAndPath.add(smallestIndex);
+        costAndPath.add(minSubsetIndex);
         return costAndPath;
     }
 
@@ -114,7 +116,7 @@ public class tcss343 {
      * @param set
      * @return
      */
-    public ArrayList<ArrayList<Integer>> printSubsets(ArrayList<Integer> set) {
+    public ArrayList<ArrayList<Integer>> findMinSubset(ArrayList<Integer> set) {
         ArrayList<ArrayList<Integer>> MainPowerSet = new ArrayList<>();
         int n = set.size();
 
@@ -163,24 +165,123 @@ public class tcss343 {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         //open file and process from command line arg 0
+        Scanner input = null;
+        String fileIn = args[0]; //Stores input file name.
+        Boolean test = false; //Checks if file was openend succesfully.
+        try {
+            input = new Scanner(new File(fileIn)); //Opens file with scanner.
+            //Sets up file for output.
+            test = true; //Shows it opened files succesfully.
 
+        } catch (FileNotFoundException e) {
+            System.out.print("File not found " + e);
+        }
+        //Checks to make sure files were open succesfully.
+        if (test) {
+            System.out.println();
 
-        tcss343 tcss = new tcss343();
-        // hard coded for now
-        int [][] matrix = {{0, 2, 3, 7},
-                           {-1, 0, 2, 4},
-                           {-1, -1, 0, 2},
-                           {-1, -1, -1, 0}};
+            tcss343 tcss = new tcss343();
+            // hard coded for now
+            int[][] matrix = {{0, 2, 3, 7},
+                    {-1, 0, 2, 4},
+                    {-1, -1, 0, 2},
+                    {-1, -1, -1, 0}};
+            try {
+                getInput(input, fileIn);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
-        ArrayList<Integer> result = tcss.bruteForce(matrix);
-        //cost = array list 0, path is the rest of array list
-        System.out.println(result.toString());
+            ArrayList<Integer> result = tcss.bruteForce(matrix);
+            //cost = array list 0, path is the rest of array list
+            System.out.println(result.toString());
 
+        }
+    }
 
+    /**
+     * THIS WORKS BUT VERY MESSY PROBABLY NEED TO REDO IT.
+     * @param theInput
+     * @param theFileIn
+     * @throws FileNotFoundException
+     */
+    public static void getInput(Scanner theInput, String theFileIn) throws FileNotFoundException {
+        /* THIS WILL GET THE NUMBER OF ROWS */
+        ArrayList<Integer> array = new ArrayList<>();
+        String input = null;
+        String s = "";
+        int row = 0;
+        while (theInput.hasNextLine()) {
+            row++;
+            s += theInput.nextLine() + "\n";
+        }
+        System.out.println(s + "Row: " + row);
 
+        /* THIS WILL GET THE NUMBER OF COLUMNS */
+        Scanner sc = new Scanner(new File(theFileIn));
+        int col = 0;
+        boolean flag = true;
+        while (sc.hasNext()) {
+            String temp =sc.next();
+            if (!(temp.equals("NA")) && flag) {
+                col++;
+            } else {
+                flag = false;
+            }
 
+        }
+        System.out.println("Col: " + col);
+
+        /* THIS WILL PUT THE VALUES INTO THE MATRIX */
+        Scanner newsc = new Scanner(new File(theFileIn));
+
+        int [][] matrix = new int[row][col];
+
+        int tempRow = 0;
+        int tempCol = 0;
+
+        while (newsc.hasNext()) {
+            if (tempCol == col - 1) {
+                if (newsc.hasNextInt()) {
+
+                    int num = newsc.nextInt();
+                    System.out.println("CURRENT " +num);
+                    matrix[tempRow][tempCol] = num;
+                } else {
+                    matrix[tempRow][tempCol] = -1;
+                    newsc.next();
+                }
+                tempCol = 0;
+                tempRow++;
+            } else {
+                if (tempRow != row) {
+
+                    System.out.println("row: " + tempRow + " col: " + tempCol);
+
+                    if (newsc.hasNextInt()) {
+
+                        int num = newsc.nextInt();
+                        System.out.println("CURRENT " +num);
+                        matrix[tempRow][tempCol] = num;
+                        tempCol++;
+                    } else {
+                        matrix[tempRow][tempCol] = -1;
+                        newsc.next();
+                        tempCol++;
+                    }
+                }
+            }
+
+        }
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
 }
