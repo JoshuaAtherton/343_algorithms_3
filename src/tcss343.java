@@ -46,7 +46,8 @@ public class tcss343 {
     }
 
     /**
-     * This will get the first row of the matrix allowing us to see the total amount of subsets we can make.
+     * This will get the first row of the matrix allowing us to see the
+     * total amount of subsets we can make.
      *
      * @param theMatrix
      * @return
@@ -66,7 +67,8 @@ public class tcss343 {
      * @param matrix
      * @return
      */
-    private static ArrayList<Integer> getShortestPath(ArrayList<ArrayList<Integer>> powerSet, int [][] matrix) {
+    private static ArrayList<Integer> getShortestPath(
+            ArrayList<ArrayList<Integer>> powerSet, int [][] matrix) {
 
         ArrayList<Integer> costAndPath = new ArrayList<>();
         //This will hold the smallest sublist/path of nodes to the end.
@@ -81,7 +83,8 @@ public class tcss343 {
             //Current cost of the current subset.
             int currentCost = 0;
 
-            //This will allow us to map for example(0,1)-> (1, 2) which would be (0,1)-> ((1=LastValue), 2) -> ((2=LastValue), 3)
+            //This will allow us to map for example(0,1)-> (1, 2)
+            // which would be (0,1)-> ((1=LastValue), 2) -> ((2=LastValue), 3)
             int LastValue = 0;
             //This will add in the 0, 0 cost.
             for (int j = 0; j < powerSet.get(i).size(); j++) {
