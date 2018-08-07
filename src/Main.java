@@ -28,11 +28,13 @@ public class Main {
             System.out.println("AFTER:" + powerSet.get(i));
         }
 
-        int shortestIndex = getShortestPath(powerSet, matrix);
-        System.out.println("AFTER:" + powerSet.get(shortestIndex));
+        ArrayList<Integer> shortestIndex = getShortestPath(powerSet, matrix);
+        System.out.println("AFTER:" + powerSet.get(shortestIndex.get(1)));
+
+        System.out.println("Total Cost: " + shortestIndex.get(0));
 
         //Prints shortest Path
-        for (int i = shortestIndex; i <= shortestIndex; i++) {
+        for (int i = shortestIndex.get(1); i <= shortestIndex.get(1); i++) {
             System.out.print("0 -> ");
             for (int j = 0; j < powerSet.get(i).size(); j++) {
                 System.out.print(powerSet.get(i).get(j)+ " ->");
@@ -62,16 +64,18 @@ public class Main {
      * @param matrix
      * @return
      */
-    private static int getShortestPath(ArrayList<ArrayList<Integer>> powerSet, int [][] matrix) {
+    private static ArrayList<Integer> getShortestPath(ArrayList<ArrayList<Integer>> powerSet, int [][] matrix) {
+
+        ArrayList<Integer> costAndPath = new ArrayList<>();
         //This will hold the smallest sublist/path of nodes to the end.
         int smallestIndex = 0;
 
         //Total minimum between all subsets/paths.
-        int minimum = 99999999;
+        int minimumCost = 99999999;
 
         for (int i = 0; i < powerSet.size(); i++) {
             //This will allow us to update our current index of the smallest path.
-            int currentIndex = i;
+            int currentSubsetIndex = i;
             //Current cost of the current subset.
             int currentCost = 0;
 
@@ -89,14 +93,18 @@ public class Main {
             System.out.println();
 
             //This will check if global minimum between sets needs to be updated.
-            if (minimum > currentCost) {
-                minimum = currentCost;
+            if (minimumCost > currentCost) {
+                minimumCost = currentCost;
                 //Set smallest index.
-                smallestIndex = currentIndex;
+                smallestIndex = currentSubsetIndex;
 
             }
         }
-    return smallestIndex;
+        //Minimum Cost.
+        costAndPath.add(minimumCost);
+        //Shortest Path
+        costAndPath.add(smallestIndex);
+    return costAndPath;
     }
 
     /**
