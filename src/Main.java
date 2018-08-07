@@ -3,10 +3,14 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
 //        System.out.println("hello");
-        int [][] matrix = {{0, 2, 3, 7},
-                           {-1, 0, 2, 4},
-                           {-1, -1, 0, 2},
-                           {-1, -1, -1, 0}};
+//        int [][] matrix = {{0, 2, 3, 7},
+//                           {-1, 0, 2, 4},
+//                           {-1, -1, 0, 2},
+//                           {-1, -1, -1, 0}};
+        int [][] matrix = { {0, 2, 2, 1, 15},
+                            {-1, 0, 2, 3, 30},
+                            {-1, -1, 0, 2, 9},
+                            {-1, -1, -1, 0, 20}};
         //This will get the value (1, 2) which is 1, 1 and 1,2 we want find power set now of these.
         //We dont care about 0,0 and 3,3 because they will always be the beginning and the end.
         ArrayList<Integer> startingValues = getFirstRow(matrix);
@@ -126,7 +130,7 @@ public class Main {
 
         // Run a loop for printing all 2^n
         // subsets one by obe
-        for (int i = 1; i < (1<<n); i++)
+        for (int i = 0; i < (1<<n); i++)
         {
             System.out.print("{ ");
             ArrayList<Integer> subPower = new ArrayList<>();
