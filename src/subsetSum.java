@@ -53,18 +53,16 @@ public class subsetSum {
         found += (A[n-1][t] == 1) ? "true" : "false";
 
         //recover from the matrix
-        int b = A.length - 1;     /// This method not working yet
-        while (b > 0 && t > 0) {
-            while (A[b][t] == 1) {
-                b--;
-                if (b == 0) {
-                    sequence += list[b];
-                    sequence += " ";
-                }
+        int b = A.length - 1;
+        while (A[b][t] == 1 && b > 0 && t > 0) {
+            b--;
+            if (b == 0) {
+                sequence += list[b];
+                sequence += " ";
+            }
             t = t - A[b+1][0];
             sequence += list[b];
             sequence += " ";
-            }
         }
 
         return found + ", sequence:" + sequence;
