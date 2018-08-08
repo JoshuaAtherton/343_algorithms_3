@@ -5,6 +5,7 @@ Joshua Atherton | Armoni Atherton
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.io.*;
 
@@ -167,8 +168,10 @@ public class tcss343 {
 
     public static void main(String[] args) throws FileNotFoundException {
         //open file and process from command line arg 0
+        int m[][] = null;
         Scanner input = null;
-        String fileIn = args[0]; //Stores input file name.
+//        String fileIn = args[0]; //Stores input file name.
+        String fileIn = "src/input.txt"; // to run without using terminal
         Boolean test = false; //Checks if file was openend succesfully.
         try {
             input = new Scanner(new File(fileIn)); //Opens file with scanner.
@@ -180,23 +183,24 @@ public class tcss343 {
         }
         //Checks to make sure files were open succesfully.
         if (test) {
-            System.out.println();
-
             tcss343 tcss = new tcss343();
-            // hard coded for now
-            int[][] matrix = {{0, 2, 3, 7},
-                    {-1, 0, 2, 4},
-                    {-1, -1, 0, 2},
-                    {-1, -1, -1, 0}};
             try {
-                getInput(input, fileIn);
+                m = getInput(input, fileIn);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
 
-            ArrayList<Integer> result = tcss.bruteForce(matrix);
-            //cost = array list 0, path is the rest of array list
-            System.out.println(result.toString());
+            // hard coded for now // not needed
+            int[][] matrix = {{0, 2, 3, 7},
+                    {-1, 0, 2, 4},
+                    {-1, -1, 0, 2},
+                    {-1, -1, -1, 0}};
+
+            //begin main function calls
+
+            ArrayList<Integer> result = tcss.bruteForce(m);
+//            System.out.println(result.toString());
+//            System.out.println(Arrays.deepToString(m));
 
         }
     }
@@ -207,7 +211,7 @@ public class tcss343 {
      * @param theFileIn
      * @throws FileNotFoundException
      */
-    public static void getInput(Scanner theInput, String theFileIn) throws FileNotFoundException {
+    public static int[][] getInput(Scanner theInput, String theFileIn) throws FileNotFoundException {
         /* THIS WILL GET THE NUMBER OF ROWS */
         ArrayList<Integer> array = new ArrayList<>();
         String input = null;
@@ -217,7 +221,6 @@ public class tcss343 {
             row++;
             s += theInput.nextLine() + "\n";
         }
-        System.out.println(s + "Row: " + row);
 
         /* THIS WILL GET THE NUMBER OF COLUMNS */
         Scanner sc = new Scanner(new File(theFileIn));
@@ -230,15 +233,11 @@ public class tcss343 {
             } else {
                 flag = false;
             }
-
         }
-        System.out.println("Col: " + col);
 
         /* THIS WILL PUT THE VALUES INTO THE MATRIX */
         Scanner newsc = new Scanner(new File(theFileIn));
-
         int [][] matrix = new int[row][col];
-
         int tempRow = 0;
         int tempCol = 0;
 
@@ -247,7 +246,6 @@ public class tcss343 {
                 if (newsc.hasNextInt()) {
 
                     int num = newsc.nextInt();
-                    System.out.println("CURRENT " +num);
                     matrix[tempRow][tempCol] = num;
                 } else {
                     matrix[tempRow][tempCol] = -1;
@@ -257,13 +255,8 @@ public class tcss343 {
                 tempRow++;
             } else {
                 if (tempRow != row) {
-
-                    System.out.println("row: " + tempRow + " col: " + tempCol);
-
                     if (newsc.hasNextInt()) {
-
                         int num = newsc.nextInt();
-                        System.out.println("CURRENT " +num);
                         matrix[tempRow][tempCol] = num;
                         tempCol++;
                     } else {
@@ -273,15 +266,8 @@ public class tcss343 {
                     }
                 }
             }
-
         }
-
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                System.out.print(matrix[i][j] + " ");
-            }
-            System.out.println();
-        }
+        return matrix;
     }
 
 }
