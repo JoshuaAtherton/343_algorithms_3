@@ -4,9 +4,15 @@ Homework 4
 Joshua Atherton | Armoni Atherton
  */
 
+import java.io.File;
 import java.util.ArrayList;
+<<<<<<< Updated upstream
 import java.util.Scanner;
 import java.io.*;
+=======
+import java.util.Arrays;
+import java.util.Scanner;
+>>>>>>> Stashed changes
 
 /**
  * Homework for solves the coin change problem using 3 different algorithm approaches
@@ -219,6 +225,7 @@ public class tcss343 {
         }
         System.out.println(s + "Row: " + row);
 
+<<<<<<< Updated upstream
         /* THIS WILL GET THE NUMBER OF COLUMNS */
         Scanner sc = new Scanner(new File(theFileIn));
         int col = 0;
@@ -236,9 +243,13 @@ public class tcss343 {
 
         /* THIS WILL PUT THE VALUES INTO THE MATRIX */
         Scanner newsc = new Scanner(new File(theFileIn));
+=======
+        ArrayList<Integer> result = tcss.bruteForce(matrix);
+>>>>>>> Stashed changes
 
         int [][] matrix = new int[row][col];
 
+<<<<<<< Updated upstream
         int tempRow = 0;
         int tempCol = 0;
 
@@ -282,6 +293,26 @@ public class tcss343 {
             }
             System.out.println();
         }
+=======
+        String inputFile = readFile(args[0]);
+        System.out.println(inputFile);
+        String [] s = inputFile.split(" ");
+        System.out.println(Arrays.toString(s));
+    }
+
+    public static String readFile(String fileName) {
+        String inputFile = "";
+        try {
+            Scanner sc = new Scanner(new File(fileName));
+            while (sc.hasNextLine()) {
+                inputFile += sc.nextLine() + '\n';
+            }
+            sc.close();
+        } catch (Exception f) {
+            System.out.println(f + "file not found");
+        }
+        return inputFile;
+>>>>>>> Stashed changes
     }
 
 }

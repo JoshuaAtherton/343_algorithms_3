@@ -49,20 +49,24 @@ public class subsetSum {
      */
     public String subsetSumRecover(int A[][], int list[], int t) {
         String found = "found = ", sequence = " ";
-        int n = A.length;
-        found += (A[n-1][t] == 1) ? "true" : "false";
+        int n = A.length - 1;
+        found += (A[n][t] == 1) ? "true" : "false";
 
         //recover from the matrix
-        int b = A.length - 1;
-        while (A[b][t] == 1 && b > 0 && t > 0) {
-            b--;
-            if (b == 0) {
-                sequence += list[b];
-                sequence += " ";
+        if (A[n][t] == 1) {
+            while (n > 0 && t > 0) {
+                if (A[n - 1][t] == 1) {
+                    n--;
+                } else {
+                    sequence += list[n];
+                    sequence += ' ';
+                    t = t - list[n];
+                    n--;
+                }
+                if (n == 0 || t == 0) {
+                    sequence += list[n];
+                }
             }
-            t = t - A[b+1][0];
-            sequence += list[b];
-            sequence += " ";
         }
 
         return found + ", sequence:" + sequence;
@@ -73,7 +77,7 @@ public class subsetSum {
 //        int list[] = {2, 3, 6, 1, 4};
 //        int target = 8;
 
-        int list[] = {2, 3, 5, 7, 9}; // 7, 3, 4 is the solution
+        int list[] = {2, 3, 5, 7, 9}; // 7, 3, 2 is the solution
         int target = 12;
         int dynamic[][];
         dynamic = sub.has_subSet(list, target);
