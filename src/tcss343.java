@@ -185,16 +185,17 @@ public class tcss343 {
                 e.printStackTrace();
             }
 
-            // hard coded for now // not needed
+            // hard coded for now // not needed // for testing
             int[][] matrix = {
-                    {0, 2, 3, 7},
-                    {-1, 0, 2, 4},
-                    {-1, -1, 0, 2},
-                    {-1, -1, -1, 0} };
+                    {0, 2, 3, 7, 4},
+                    {-1, 0, 2, 4, 5},
+                    {-1, -1, 0, 2, 1},
+                    {-1, -1, -1, 0, 3},
+                    {-1, -1, -1, -1, 0}};
 
             //begin main function calls
 
-            ArrayList<Integer> result = tcss.bruteForce(m);
+            ArrayList<Integer> result = tcss.bruteForce(matrix);
 //            System.out.println(result.toString());
 //            System.out.println(Arrays.deepToString(m));
 
