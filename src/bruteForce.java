@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 
-public class Main {
+public class bruteForce {
     public static void main(String[] args) {
 //        System.out.println("hello");
+        //his given one
         int [][] matrix = {{0, 2, 3, 7},
                            {-1, 0, 2, 4},
                            {-1, -1, 0, 2},
                            {-1, -1, -1, 0}};
+
+        //for testing
 //        int [][] matrix = { {0, 2, 2, 1, 15},
 //                            {-1, 0, 2, 3, 30},
 //                            {-1, -1, 0, 2, 9},

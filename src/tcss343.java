@@ -127,11 +127,6 @@ public class tcss343 {
 
             // Print current subset
             for (int j = 0; j < n; j++)
-                // (1<<j) is a number with jth bit 1
-                // so when we 'and' them with the
-                // subset number we get which numbers
-                // are present in the subset and which
-                // are not
                 if ((i & (1 << j)) > 0) {
                     subPower.add(set.get(j));
                 }
@@ -191,16 +186,19 @@ public class tcss343 {
             }
 
             // hard coded for now // not needed
-            int[][] matrix = {{0, 2, 3, 7},
+            int[][] matrix = {
+                    {0, 2, 3, 7},
                     {-1, 0, 2, 4},
                     {-1, -1, 0, 2},
-                    {-1, -1, -1, 0}};
+                    {-1, -1, -1, 0} };
 
             //begin main function calls
 
             ArrayList<Integer> result = tcss.bruteForce(m);
 //            System.out.println(result.toString());
 //            System.out.println(Arrays.deepToString(m));
+
+
 
         }
     }
