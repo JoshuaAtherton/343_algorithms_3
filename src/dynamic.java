@@ -17,12 +17,18 @@ public class dynamic {
                 {-1, -1, -1, 0, 3},
                 {-1, -1, -1, -1, 0}};
 
-        d.generateSolutionMatrix(matrix2);
+        d.generateSolutionMatrix(matrix);
 
     }
 
+    /**
+     * Returns an array where first element is the cost and remaining elements are the path.
+     * @param A
+     * @return
+     */
     public int[] generateSolutionMatrix(int[][] A) {
         int[] result = null;
+        int[] path = null;
 
         int rows = A.length;
         int cols = A[0].length;
@@ -32,25 +38,8 @@ public class dynamic {
         for (int c = 0; c < cols; c++) {
            M[0][c] = A[0][c];
         }
-        // initialize col1 with initial values
-        for (int r = 1; r < rows; r++) {
-            M[r][0] = -1;
-        }
 
-        // dynamically add costs to each path not quite there
-        /*
-        for (int r = 1; r < rows; r++) {
-            for (int c = 1; c < cols; c++) {
-                if (r >= c) {
-                    M[r][c] = -1;
-                } else {
-                    M[r][c] = M[r-1][c-1] + A[c-1][c];
-                }
-            }
-        }
-        */
-
-        //working version
+        // create the rest of the solution matrix
         for (int r = 1; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 if (c <= r) {
@@ -62,48 +51,53 @@ public class dynamic {
         }
 
         //print the matrix
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                System.out.printf("%2d ", M[r][c]);
-            }
-            System.out.println();
-        }
+//        for (int r = 0; r < rows; r++) {
+//            for (int c = 0; c < cols; c++) {
+//                System.out.printf("%2d ", M[r][c]);
+//            }
+//            System.out.println();
+//        }
 
-        recoverSolution(M);
+        path = recoverSolution(M);
+        result = new int[path.length + 1];
+        result[0] = M[rows - 1][cols - 1];
+        for (int i = 0; i < path.length; i++) {
+            result[i + 1] = path[i];
+        }
+        System.out.println(Arrays.toString(result));
         return result;
     }
 
-    public void recoverSolution(int M[][]) {
+    public int[] recoverSolution(int M[][]) {
+        int[] path = null;
         Stack<Integer> S = new Stack<>();
         int i = M.length - 1;
         int j = M[0].length - 1;
-        S.push(3 + 1);
+
         while (i > 0 && j > 0) {
-            int min = M[i][j];
-            if (M[i-1][j] < min) {
-                S.push(M[i-1][j] + 1);
-                min = M[i-1][j];
+            if (M[i-1][j] == M[i][j]) {
                 i--;
-            } else if (M[i][j-1] < min) {
-                S.push(M[i][j-1] + 1);
-                min = M[i][j-1];
+            } else {
+                S.push(j + 1);
                 j--;
             }
+            if (i == 0 || j == 0) {
+                S.push(j + 1);
+            }
         }
-        S.push(0 + 1);
+        S.push(1);
 
-        System.out.println(S.toString());
-        /* pseudo code
-        recover(M[1..n][1..m])
-            let S be an empty stack
-            let i = n and j = m
-            while i > 1 and j > 1:
-                if M[i,j] = up
-                    then push down onto S and i = i - 1
-                else
-                    push right onto S and j = j - 1
-            return S
-         */
+        // reverse the path and store in an array
+        path = new int[S.size()];
+        //pop stack into an array
+        int count = 0;
+        while (!S.isEmpty()) {
+            path[count] = S.pop();
+            count++;
+        }
+
+//        System.out.println(Arrays.toString(path));
+        return path;
     }
 
 }
