@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.io.*;
+import java.util.Stack;
 
 /**
- * Homework for solves the coin change problem using 3 different algorithm approaches
+ * Project 4 solves the problem of the shortest path from one point to
+ * another using 3 different approaches: brute force, divide and conquer,
+ * and dynamic programming.
  */
 public class tcss343 {
 
@@ -28,7 +31,7 @@ public class tcss343 {
         ArrayList<ArrayList<Integer>> powerSet = findMinSubset(startingValues);
         ArrayList<Integer> shortestPath = getShortestPath(powerSet, matrix);
 
-        System.out.println("Brute force: ");
+        System.out.println("\nBrute force: ");
         System.out.println("Total Cost: " + shortestPath.get(0));
         System.out.print("Path: ");
 
@@ -155,14 +158,112 @@ public class tcss343 {
      * In what order will the table be filled? How would you use the table to
      * find the cheapest sequence of canoe rentals from post 1 to post n? Implement
      * the corresponding dynamic programming solution.
+     *
+     * @param matrix represents the graph of destinations and costs
+     * @return an array where index one is the cost and what
+     *         follows is the shortest path
      */
-    public void dynamic() {
+    public int[] dynamic(int [][] matrix) {
+        int[] solution = generateSolutionMatrix(matrix);
 
+        System.out.println("\nDynamic implementation: ");
+        System.out.println("Cost: " + solution[0]);
+        System.out.printf("Path: %d", solution[1]);
+        for(int i = 2; i < solution.length; i++) {
+            System.out.print(" -> ");
+            System.out.print(solution[i]);
+        }
+        System.out.println();
 
+        return solution;
+    }
 
+    /**
+     * Returns an array where first element is the cost and remaining elements are the path.
+     * @param A represents the graph of destinations and costs
+     * @return an array where index one is the cost and what
+     *         follows is the shortest path
+     */
+    public int[] generateSolutionMatrix(int[][] A) {
+        int[] result = null;
+        int[] path = null;
+
+        int rows = A.length;
+        int cols = A[0].length;
+        int[][] M = new int[rows][cols];
+
+        // initialize row1 with initial direct values
+        for (int c = 0; c < cols; c++) {
+            M[0][c] = A[0][c];
+        }
+
+        // create the rest of the solution matrix
+        for (int r = 1; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (c <= r) {
+                    M[r][c] = M[r - 1][c];
+                } else {
+                    M[r][c] = Math.min(M[r-1][c], M[r-1][r] + A[r][c]);
+                }
+            }
+        }
+
+        // get the path
+        path = recoverSolution(M);
+        result = new int[path.length + 1];
+        result[0] = M[rows - 1][cols - 1];
+        for (int i = 0; i < path.length; i++) {
+            result[i + 1] = path[i];
+        }
+
+        return result;
+    }
+
+    /**
+     * Given an 2-d array that represents a solution matrix for another graph
+     * this method will recover the shortest path from this matrix.
+     * @param M the solution matrix to recover the shortest path from
+     * @return an array representing the shortest path
+     */
+    public int[] recoverSolution(int M[][]) {
+        int[] path = null;
+        Stack<Integer> S = new Stack<>();
+        int i = M.length - 1;
+        int j = M[0].length - 1;
+
+        while (i > 0 && j > 0) {
+            if (M[i-1][j] == M[i][j]) {
+                i--;
+            } else {
+                S.push(j + 1);
+                j--;
+            }
+            if (i == 0 || j == 0) {
+                S.push(j + 1);
+            }
+        }
+        S.push(1);
+
+        // reverse the path and store in an array
+        path = new int[S.size()];
+        //pop stack into an array
+        int count = 0;
+        while (!S.isEmpty()) {
+            path[count] = S.pop();
+            count++;
+        }
+
+        return path;
     }
 
 
+    /**
+     *  Driver to open a .txt file that hold an adjacency matrix that represents
+     *  a graph. After reading the contents of the file will solve the shortest
+     *  path problem using different algorithm implementations.
+     * @param args
+     * @throws FileNotFoundException
+     */
     public static void main(String[] args) throws FileNotFoundException {
         //open file and process from command line arg 0
         int m[][] = null;
@@ -197,11 +298,14 @@ public class tcss343 {
 
             //begin main function calls
 
-            ArrayList<Integer> result = tcss.bruteForce(matrix);
-//            System.out.println(result.toString());
+            // get the solution with the brute force method
+            ArrayList<Integer> bruteResult = tcss.bruteForce(matrix);
+//            System.out.println(bruteResult.toString());
 //            System.out.println(Arrays.deepToString(m));
 
 
+            //get the solution with the dynamic method
+            int[] dynamicResult = tcss.dynamic(m);
 
         }
     }
@@ -271,4 +375,28 @@ public class tcss343 {
         return matrix;
     }
 
+    // 3.5 Testing
+    /**
+     * Generate random matrices.
+     */
+    public static void randomMatrixGenerator() {
+        int[] n = {25, 50, 100, 200, 400, 800};
+
+        //run through each power of n
+        for (int i: n) {
+            int[][] nthMatrix = new int[i][i];
+            // generate the n-th matrix
+            for (int r = 0; r < i; r++) {
+                for (int c = 0; c < i; c++) {
+                    if (r <= c) {
+                        nthMatrix[r][c] = 0;
+                    } else {
+
+                    }
+                }
+            }
+            //write the nthMatrix out to file here???
+
+        } // end n-th for loop
+    }
 }
