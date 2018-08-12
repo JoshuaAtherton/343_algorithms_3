@@ -14,7 +14,7 @@ import java.io.*;
  */
 public class tcss343 {
     static Stack<Integer> s = new Stack<>();
-    static ArrayList<pathCost> pathCostsList = new ArrayList<pathCost>();
+    static ArrayList<pathCost> pathCostsList = new ArrayList<>();
 
     /**
      * Inner class to store the path and cheapest costs of a graph.
@@ -199,6 +199,7 @@ public class tcss343 {
      * @param s a stack of integers
      * @return an array that is equivalent to the stack
      */
+    @SuppressWarnings("unchecked")
     public int[] stackToArray(Stack<Integer> s) {
         int[] result = new int[s.size()];
         Stack<Integer> temp = (Stack<Integer>)s.clone();
@@ -373,21 +374,21 @@ public class tcss343 {
         String fileIn = "src/input.txt"; // to run without using terminal
         Boolean test = false; //Checks if file was openend succesfully.
         try {
-            input = new Scanner(new File(fileIn)); //Opens file with scanner.
+//            input = new Scanner(new File(fileIn)); //Opens file with scanner.
+            input = new Scanner(System.in);
             //Sets up file for output.
             test = true; //Shows it opened files succesfully.
 
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             System.out.print("File not found " + e);
         }
         //Checks to make sure files were open succesfully.
         if (test) {
             tcss343 tcss = new tcss343();
-            try {
-                m = getInput(input, fileIn);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+                System.out.println("IN the get output");
+                m = getInput(input);
+                System.out.println("OUT the get output");
+
 
             // hard coded for now // not needed // for testing
             int[][] matrix = {
@@ -399,6 +400,7 @@ public class tcss343 {
 
             /************* begin main function calls ********************/
 
+
             // get the solution with the brute force method
             ArrayList<Integer> bruteResult = tcss.bruteForce(m);
 
@@ -408,71 +410,63 @@ public class tcss343 {
             //get the solution with the dynamic method
             int[] dynamicResult = tcss.dynamic(m);
 
+
         }
     }
 
     /**
-     * THIS WORKS BUT VERY MESSY PROBABLY NEED TO REDO IT.
-     * @param theInput
-     * @param theFileIn
-     * @throws FileNotFoundException
+     * This will read in the input from the file and store it into a
+     * matrix.
+     *
+     * @param theInput the current file that is being read in.
+     * @return the matrix that will hold the contents of the file.
      */
-    public static int[][] getInput(Scanner theInput, String theFileIn) throws FileNotFoundException {
-        /* THIS WILL GET THE NUMBER OF ROWS */
-        ArrayList<Integer> array = new ArrayList<>();
-        String input = null;
-        String s = "";
-        int row = 0;
+    public static int[][] getInput(Scanner theInput)  {
+
+        StringBuilder sb = new StringBuilder();
+        int numberOfRows = 0;
+        //This will count how big to make matrix.
         while (theInput.hasNextLine()) {
-            row++;
-            s += theInput.nextLine() + "\n";
+            numberOfRows++;
+            sb.append(theInput.nextLine() + "\n");
         }
 
-        /* THIS WILL GET THE NUMBER OF COLUMNS */
-        Scanner sc = new Scanner(new File(theFileIn));
-        int col = 0;
-        boolean flag = true;
-        while (sc.hasNext()) {
-            String temp =sc.next();
-            if (!(temp.equals("NA")) && flag) {
+        int [][] matrix = new int[numberOfRows][numberOfRows];
+//        System.out.println(sb.toString() + numberOfRows);
+
+        int row = 0, col = 0;
+        int size = sb.toString().toCharArray().length;
+        for (int r = 0; r < size; r++) {
+            //This will check new line.
+            if (sb.charAt(r) == '\n') {
+//                System.out.println();
+                row++;
+                col = 0;
+
+            } else if (sb.charAt(r) == ' ') { //This will check space
+                    //Do nothing
+            } else if (sb.charAt(r) == 'N') {
+                //This increments past the 'A'.
+//                System.out.print(-1 + " ");
+                matrix[row][col] = -1;
+                //Added a value so increment another spot over.
                 col++;
+                r++;
             } else {
-                flag = false;
+//                System.out.print(sb.charAt(r) + " ");
+                matrix[row][col] = sb.charAt(r) - '0';
+                col++;
             }
         }
-
-        /* THIS WILL PUT THE VALUES INTO THE MATRIX */
-        Scanner newsc = new Scanner(new File(theFileIn));
-        int [][] matrix = new int[row][col];
-        int tempRow = 0;
-        int tempCol = 0;
-
-        while (newsc.hasNext()) {
-            if (tempCol == col - 1) {
-                if (newsc.hasNextInt()) {
-
-                    int num = newsc.nextInt();
-                    matrix[tempRow][tempCol] = num;
-                } else {
-                    matrix[tempRow][tempCol] = -1;
-                    newsc.next();
-                }
-                tempCol = 0;
-                tempRow++;
-            } else {
-                if (tempRow != row) {
-                    if (newsc.hasNextInt()) {
-                        int num = newsc.nextInt();
-                        matrix[tempRow][tempCol] = num;
-                        tempCol++;
-                    } else {
-                        matrix[tempRow][tempCol] = -1;
-                        newsc.next();
-                        tempCol++;
-                    }
-                }
+        //This will allow for print the matrix that is returned.
+    /*
+        for (int r = 0; r < matrix.length; r++) {
+            System.out.println();
+            for (int c = 0; c < matrix.length; c++) {
+                System.out.print(matrix[r][c] + "  ");
             }
         }
+    */
         return matrix;
     }
 
