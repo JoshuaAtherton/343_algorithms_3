@@ -2,8 +2,7 @@ import java.util.*;
 
 
 public class divideConquer {
-    static Stack<Integer> s = new Stack<>(); //TODO: delete after working
-    static Stack<Integer> s_costs = new Stack<>();
+    static Stack<Integer> s = new Stack<>(); //TODO: delete after working?
     static ArrayList<pathCost> pathCostsList = new ArrayList<>();
 
     public class pathCost {
@@ -57,7 +56,7 @@ public class divideConquer {
     }
     public int getCost(int[][] A, int[] nodes) {
         int cost = 0;
-        for (int i = 0; i < nodes.length -1; i++) {
+        for (int i = 0; i < nodes.length - 1; i++) {
             cost += A[nodes[i]][nodes[i+1]];
         }
 
@@ -74,12 +73,12 @@ public class divideConquer {
     public int divide(int[][] A, int start, int end) {
         if (start == end) {
             s.push(end);
-
-            System.out.println("S return: " + s);
+//            System.out.println("S return: " + s);
 
             int[] result = stackToArray(s);
-            System.out.println("result: " + Arrays.toString(result));
+            System.out.print("cost of stack: " + Arrays.toString(result));
             int cost = getCost(A, result);
+            System.out.println(" = " + cost);
             pathCostsList.add(new pathCost(result, cost)); // how to get the costs?
             s.pop(); s.pop();
 
@@ -87,8 +86,6 @@ public class divideConquer {
         }
 
         s.push(start);
-
-        s_costs.push(A[s.peek()][start + 1]);
         ArrayList<Integer> costs = new ArrayList<>();
         for (int i = start + 1; i <= end; i++) {
             costs.add(A[start][i] + divide(A, i, end));
@@ -96,11 +93,6 @@ public class divideConquer {
         }
 
         int minCost = Collections.min(costs);
-
-        int pos = pathCostsList.size() - 1;
-        if (s.size() > 0)
-            s_costs.push(A[s.peek()][start + 1]);
-//        pathCostsList.get(pos).incrementCost(minCost);
 
         return minCost;
     }
