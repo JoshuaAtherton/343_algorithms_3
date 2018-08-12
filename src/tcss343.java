@@ -4,11 +4,8 @@ Homework 4
 Joshua Atherton | Armoni Atherton
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 import java.io.*;
-import java.util.Stack;
 
 /**
  * Project 4 solves the problem of the shortest path from one point to
@@ -16,6 +13,40 @@ import java.util.Stack;
  * and dynamic programming.
  */
 public class tcss343 {
+    static Stack<Integer> s = new Stack<>();
+    static ArrayList<pathCost> pathCostsList = new ArrayList<pathCost>();
+
+    /**
+     * Inner class to store the path and cheapest costs of a graph.
+     */
+    public class pathCost implements Comparable<pathCost> {
+        private int[] path;
+        private int cost;
+        public pathCost(int[] path, int cost) {
+            this.path = path;
+            this.cost = cost;
+        }
+        public void incrementCost(int cost) {
+            this.cost += cost;
+        }
+        public int getCost() {
+            return cost;
+        }
+        public int compareTo(pathCost pc) {
+            return this.cost - pc.getCost();
+        }
+        public String toString() {
+            String display = "Cost of path: [";
+            for (int i : this.path) {
+                display += " ";
+                display += i + 1;
+                display += " ";
+            }
+            display += "] = " + cost;
+
+            return display;
+        }
+    }
 
     //3.1 Brute force
     /**
@@ -147,8 +178,78 @@ public class tcss343 {
      * to the full input instance in the self-reduction, especially if it contains
      * overlaps. As before, you need to print the solution, as well as the sequence.
      */
-    public void divide() {
+    public void divideAndConquer(int[][] matrix) {
+        divide(matrix, 0, matrix.length - 1);
 
+        Collections.sort(pathCostsList);
+
+        System.out.println("\nDivide and conquer: optimal cost and path\n" + pathCostsList.get(0));
+        for (int i = 1; i < pathCostsList.size(); i++) {
+            if (pathCostsList.get(i).getCost() == pathCostsList.get(0).getCost()) {
+                System.out.println(pathCostsList.get(i));
+            } else {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Take a stack as input and return that stack in the
+     * same order as an array
+     * @param s a stack of integers
+     * @return an array that is equivalent to the stack
+     */
+    public int[] stackToArray(Stack<Integer> s) {
+        int[] result = new int[s.size()];
+        Stack<Integer> temp = (Stack<Integer>)s.clone();
+        for(int i = s.size() - 1; i >= 0; i--) {
+            result[i] = temp.pop();
+        }
+        return result;
+    }
+
+    /**
+     *  The cost it will take to travel in the given nodes
+     *  sequence.
+     * @param A the matrix that represents the graph with costs
+     * @param nodes a sequence of nodes
+     * @return the cost to travel that node sequence
+     */
+    public int getCost(int[][] A, int[] nodes) {
+        int cost = 0;
+        for (int i = 0; i < nodes.length - 1; i++) {
+            cost += A[nodes[i]][nodes[i+1]];
+        }
+        return cost;
+    }
+
+    /**
+     * Gets the minimum cost of the graph to go from one
+     * start node to the end node.
+     * @param A the matrix that represents the graph to search
+     * @param start starting node
+     * @param end node to end on (get to)
+     * @return the minimum possible cost
+     */
+    public int divide(int[][] A, int start, int end) {
+        if (start == end) {
+            s.push(end);
+            int[] result = stackToArray(s);
+            int cost = getCost(A, result);
+            pathCostsList.add(new pathCost(result, cost));
+            s.pop(); s.pop();
+            return 0;
+        }
+
+        s.push(start);
+        ArrayList<Integer> costs = new ArrayList<>();
+        for (int i = start + 1; i <= end; i++) {
+            costs.add(A[start][i] + divide(A, i, end));
+        }
+
+        int minCost = Collections.min(costs);
+
+        return minCost;
     }
 
 
@@ -296,13 +397,13 @@ public class tcss343 {
                     {-1, -1, -1, 0, 3},
                     {-1, -1, -1, -1, 0}};
 
-            //begin main function calls
+            /************* begin main function calls ********************/
 
             // get the solution with the brute force method
-            ArrayList<Integer> bruteResult = tcss.bruteForce(matrix);
-//            System.out.println(bruteResult.toString());
-//            System.out.println(Arrays.deepToString(m));
+            ArrayList<Integer> bruteResult = tcss.bruteForce(m);
 
+            //get the solution with the divide and conquer method
+            tcss.divideAndConquer(m);
 
             //get the solution with the dynamic method
             int[] dynamicResult = tcss.dynamic(m);
