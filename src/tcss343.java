@@ -391,7 +391,8 @@ public class tcss343 {
                     if (r <= c) {
                         nthMatrix[r][c] = 0;
                     } else {
-
+                        //todo: part 1 done but part 2?
+                        nthMatrix[r][c] = (int) Math.random();
                     }
                 }
             }

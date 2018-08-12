@@ -48,7 +48,7 @@ public class subsetSum {
      * @return if found or not
      */
     public String subsetSumRecover(int A[][], int list[], int t) {
-        String found = "found = ", sequence = " ";
+        String found = "found = ", sequence = " ", indexes = " ";
         int n = A.length - 1;
         found += (A[n][t] == 1) ? "true" : "false";
 
@@ -59,16 +59,18 @@ public class subsetSum {
                     n--;
                 } else {
                     sequence += list[n];
+                    indexes += n;
                     sequence += ' ';
                     t = t - list[n];
                     n--;
                 }
                 if (n == 0 || t == 0) {
+                    indexes += n;
                     sequence += list[n];
                 }
             }
         }
-        return found + ", sequence:" + sequence;
+        return found + ", sequence:" + sequence + " indexes: " + indexes;
     }
 
     public static void main(String[] args) {

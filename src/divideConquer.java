@@ -1,11 +1,9 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Stack;
+import java.util.*;
 
 
 public class divideConquer {
     static Stack<Integer> s = new Stack<>(); //TODO: delete after working
+    static Stack<Integer> s_costs = new Stack<>();
     static ArrayList<pathCost> pathCostsList = new ArrayList<>();
 
     public class pathCost {
@@ -57,6 +55,14 @@ public class divideConquer {
         }
         return result;
     }
+    public int getCost(int[][] A, int[] nodes) {
+        int cost = 0;
+        for (int i = 0; i < nodes.length -1; i++) {
+            cost += A[nodes[i]][nodes[i+1]];
+        }
+
+        return cost;
+    }
 
     /**
      * Gets the minimum cost but still need to get the optimal path
@@ -68,27 +74,34 @@ public class divideConquer {
     public int divide(int[][] A, int start, int end) {
         if (start == end) {
             s.push(end);
-            System.out.println("return: " + s);
+
+            System.out.println("S return: " + s);
 
             int[] result = stackToArray(s);
-            pathCostsList.add(new pathCost(result, 5)); // how to get the costs?
-//            for (int i = 1; i <= end - 1; i++)
-//                s.pop();
+            System.out.println("result: " + Arrays.toString(result));
+            int cost = getCost(A, result);
+            pathCostsList.add(new pathCost(result, cost)); // how to get the costs?
             s.pop(); s.pop();
+
             return 0;
         }
 
         s.push(start);
+
+        s_costs.push(A[s.peek()][start + 1]);
         ArrayList<Integer> costs = new ArrayList<>();
         for (int i = start + 1; i <= end; i++) {
             costs.add(A[start][i] + divide(A, i, end));
+
         }
 
         int minCost = Collections.min(costs);
 
-//        System.out.println("stack: " + s);
-        System.out.println("\tcosts: " + costs);
-//        System.out.printf("\treturnCost- s%d e%d = %d \n", start, end, minCost);
+        int pos = pathCostsList.size() - 1;
+        if (s.size() > 0)
+            s_costs.push(A[s.peek()][start + 1]);
+//        pathCostsList.get(pos).incrementCost(minCost);
+
         return minCost;
     }
 
