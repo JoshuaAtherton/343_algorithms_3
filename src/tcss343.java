@@ -152,7 +152,7 @@ public class tcss343 {
      * @param set
      * @return
      */
-    public ArrayList<ArrayList<Integer>> findMinSubset(ArrayList<Integer> set) {
+    private ArrayList<ArrayList<Integer>> findMinSubset(ArrayList<Integer> set) {
         ArrayList<ArrayList<Integer>> MainPowerSet = new ArrayList<>();
         int n = set.size();
 
@@ -179,7 +179,7 @@ public class tcss343 {
      * to the full input instance in the self-reduction, especially if it contains
      * overlaps. As before, you need to print the solution, as well as the sequence.
      */
-    public void divideAndConquer(int[][] matrix) {
+    private void divideAndConquer(int[][] matrix) {
         divide(matrix, 0, matrix.length - 1);
 
         Collections.sort(pathCostsList);
@@ -201,7 +201,7 @@ public class tcss343 {
      * @return an array that is equivalent to the stack
      */
     @SuppressWarnings("unchecked")
-    public int[] stackToArray(Stack<Integer> s) {
+    private int[] stackToArray(Stack<Integer> s) {
         int[] result = new int[s.size()];
         Stack<Integer> temp = (Stack<Integer>)s.clone();
         for(int i = s.size() - 1; i >= 0; i--) {
@@ -217,7 +217,7 @@ public class tcss343 {
      * @param nodes a sequence of nodes
      * @return the cost to travel that node sequence
      */
-    public int getCost(int[][] A, int[] nodes) {
+    private int getCost(int[][] A, int[] nodes) {
         int cost = 0;
         for (int i = 0; i < nodes.length - 1; i++) {
             cost += A[nodes[i]][nodes[i+1]];
@@ -233,7 +233,7 @@ public class tcss343 {
      * @param end node to end on (get to)
      * @return the minimum possible cost
      */
-    public int divide(int[][] A, int start, int end) {
+    private int divide(int[][] A, int start, int end) {
         if (start == end) {
             s.push(end);
             int[] result = stackToArray(s);
@@ -249,9 +249,7 @@ public class tcss343 {
             costs.add(A[start][i] + divide(A, i, end));
         }
 
-        int minCost = Collections.min(costs);
-
-        return minCost;
+        return Collections.min(costs);
     }
 
 
@@ -266,7 +264,7 @@ public class tcss343 {
      * @return an array where index one is the cost and what
      *         follows is the shortest path
      */
-    public int[] dynamic(int [][] matrix) {
+    private int[] dynamic(int [][] matrix) {
         int[] solution = generateSolutionMatrix(matrix);
 
         System.out.println("\nDynamic implementation: ");
@@ -287,9 +285,9 @@ public class tcss343 {
      * @return an array where index one is the cost and what
      *         follows is the shortest path
      */
-    public int[] generateSolutionMatrix(int[][] A) {
-        int[] result = null;
-        int[] path = null;
+    private int[] generateSolutionMatrix(int[][] A) {
+        int[] result;
+        int[] path;
 
         int rows = A.length;
         int cols = A[0].length;
@@ -329,7 +327,7 @@ public class tcss343 {
      * @return an array representing the shortest path
      */
     public int[] recoverSolution(int M[][]) {
-        int[] path = null;
+        int[] path;
         Stack<Integer> S = new Stack<>();
         int i = M.length - 1;
         int j = M[0].length - 1;
@@ -364,15 +362,13 @@ public class tcss343 {
      *  Driver to open a .txt file that hold an adjacency matrix that represents
      *  a graph. After reading the contents of the file will solve the shortest
      *  path problem using different algorithm implementations.
-     * @param args
-     * @throws FileNotFoundException
+     * @param args the command line input.
+     * @throws FileNotFoundException throws IOException if file not created correctly.
      */
     public static void main(String[] args) throws IOException {
         //open file and process from command line arg 0
-        int m[][] = null;
+        int inputMatrix[][] = null;
         Scanner input = null;
-//        String fileIn = args[0]; //Stores input file name.
-        String fileIn = "src/input.txt"; // to run without using terminal
         Boolean test = false; //Checks if file was openend succesfully.
         try {
 //            input = new Scanner(new File(fileIn)); //Opens file with scanner.
@@ -387,7 +383,7 @@ public class tcss343 {
         if (test) {
             tcss343 tcss = new tcss343();
             randomMatrixGenerator();
-//            m = getInput(input);
+//            inputMatrix = getInput(input);
 
             // hard coded for now // not needed // for testing
             int[][] matrix = {
@@ -397,7 +393,7 @@ public class tcss343 {
                     {-1, -1, -1, 0, 3},
                     {-1, -1, -1, -1, 0}};
 
-            /************* begin main function calls ********************/
+            // *******  Begin Main Function Calls  *******
 
 
             // get the solution with the brute force method
@@ -427,7 +423,9 @@ public class tcss343 {
         //This will count how big to make matrix.
         while (theInput.hasNextLine()) {
             numberOfRows++;
-            sb.append(theInput.nextLine() + "\n");
+            sb.append(theInput.nextLine());
+            //Changed into two statements if doesnt work.
+            sb.append("\n");
         }
 
         int [][] matrix = new int[numberOfRows][numberOfRows];
@@ -473,7 +471,7 @@ public class tcss343 {
     /**
      * Generate random matrices.
      */
-    public static void randomMatrixGenerator() throws IOException {
+    private static void randomMatrixGenerator() throws IOException {
 //        int[] n = {25, 50, 100, 200, 400, 800};
         int[] n = {5};
         Random rand = new Random();
@@ -506,7 +504,11 @@ public class tcss343 {
             for (int r = 0; r < nthMatrix.length; r++) {
                 output.write("\n");
                 for (int c = 0; c < nthMatrix.length; c++) {
-                    output.write(nthMatrix[r][c] + "\t");
+                    if (nthMatrix[r][c] == -1) {
+                        output.write("NA\t");
+                    } else {
+                        output.write(nthMatrix[r][c] + "\t");
+                    }
                 }
             }
             output.flush();
