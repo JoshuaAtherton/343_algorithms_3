@@ -385,7 +385,7 @@ public class tcss343 {
             //generate the random matrices
 //            randomMatrixGenerator(false);
 
-//            inputMatrix = getInput(input);
+            inputMatrix = getInput(input);
 
             // hard coded for testing
             int[][] matrix = {
@@ -399,19 +399,19 @@ public class tcss343 {
 
             // get the solution with the brute force method
             long startTime = System.nanoTime();
-            ArrayList<Integer> bruteResult = tcss.bruteForce(matrix);
+            ArrayList<Integer> bruteResult = tcss.bruteForce(inputMatrix);
             System.out.printf("Function took: %,d nanoseconds\n",
                     (System.nanoTime() - startTime));
 
             //get the solution with the divide and conquer method
-            startTime = System.nanoTime();
-            tcss.divideAndConquer(matrix);
-            System.out.printf("Function took: %,d nanoseconds\n",
-                    (System.nanoTime() - startTime));
+//            startTime = System.nanoTime();
+//            tcss.divideAndConquer(inputMatrix);
+//            System.out.printf("Function took: %,d nanoseconds\n",
+//                    (System.nanoTime() - startTime));
 
             //get the solution with the dynamic method
             startTime = System.nanoTime();
-            int[] dynamicResult = tcss.dynamic(matrix);
+            int[] dynamicResult = tcss.dynamic(inputMatrix);
             System.out.printf("Function took: %,d nanoseconds\n",
                     (System.nanoTime() - startTime));
 
@@ -438,37 +438,43 @@ public class tcss343 {
         }
 
         int [][] matrix = new int[numberOfRows][numberOfRows];
+        Scanner theFile = new Scanner(sb.toString());
 
         int row = 0, col = 0;
-        int size = sb.toString().toCharArray().length;
-        for (int r = 0; r < size; r++) {
-            //This will check new line.
-            if (sb.charAt(r) == '\n') {
-                row++;
-                col = 0;
-
-            } else if (sb.charAt(r) == ' ') {
-                    //if is a space do nothing
-            } else if (sb.charAt(r) == 'N') {
-                //This increments past the 'A'.
-                matrix[row][col] = -1;
-                //Added a value so increment another spot over.
+        int cnt = 0;
+        while (theFile.hasNext()) {
+            if (theFile.hasNextInt()) {
+//                System.out.print(theFile.nextInt() + " ");
+                matrix[row][col] = theFile.nextInt();
                 col++;
-                r++;
+                if (numberOfRows == col) {
+                    System.out.println();
+                    col = 0;
+                    row++;
+                }
             } else {
-                matrix[row][col] = sb.charAt(r) - '0';
+//                System.out.println("Num: " + numberOfRows + " cnt: " + cnt);
+                if (numberOfRows == col) {
+//                    System.out.println();
+                    col= 0;
+                    row++;
+                }
+                theFile.next();
+                matrix[row][col] = -1;
+//                System.out.print(theFile.next() + " ");
                 col++;
             }
         }
         //This will allow for print the matrix that is returned.
-    /*
-        for (int r = 0; r < matrix.length; r++) {
-            System.out.println();
-            for (int c = 0; c < matrix.length; c++) {
-                System.out.print(matrix[r][c] + "  ");
-            }
-        }
-    */
+
+//        for (int r = 0; r < matrix.length; r++) {
+//            System.out.println();
+//            for (int c = 0; c < matrix.length; c++) {
+//                System.out.printf("%5d", matrix[r][c]);
+//            }
+//        }
+//        System.out.println();
+
         return matrix;
     }
 
@@ -488,7 +494,7 @@ public class tcss343 {
         //run through each power of n
         for (int i : n) {
             //This will create the file name.
-            String fileOut = i + "out.txt";
+            String fileOut = "./" + i + "out.txt";
             BufferedWriter output = null;
             try {
                 output = new BufferedWriter(new FileWriter(fileOut));
