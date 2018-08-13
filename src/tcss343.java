@@ -371,7 +371,6 @@ public class tcss343 {
         Scanner input = null;
         Boolean test = false; //Checks if file was openend succesfully.
         try {
-//            input = new Scanner(new File(fileIn)); //Opens file with scanner.
             input = new Scanner(System.in);
             //Sets up file for output.
             test = true; //Shows it opened files succesfully.
@@ -382,10 +381,13 @@ public class tcss343 {
         //Checks to make sure files were open succesfully.
         if (test) {
             tcss343 tcss = new tcss343();
-            randomMatrixGenerator();
+
+            //generate the random matrices
+//            randomMatrixGenerator(false);
+
 //            inputMatrix = getInput(input);
 
-            // hard coded for now // not needed // for testing
+            // hard coded for testing
             int[][] matrix = {
                     {0, 2, 3, 7, 4},
                     {-1, 0, 2, 4, 5},
@@ -395,15 +397,23 @@ public class tcss343 {
 
             // *******  Begin Main Function Calls  *******
 
-
             // get the solution with the brute force method
+            long startTime = System.nanoTime();
             ArrayList<Integer> bruteResult = tcss.bruteForce(matrix);
+            System.out.printf("Function took: %,d nanoseconds\n",
+                    (System.nanoTime() - startTime));
 
             //get the solution with the divide and conquer method
+            startTime = System.nanoTime();
             tcss.divideAndConquer(matrix);
+            System.out.printf("Function took: %,d nanoseconds\n",
+                    (System.nanoTime() - startTime));
 
             //get the solution with the dynamic method
+            startTime = System.nanoTime();
             int[] dynamicResult = tcss.dynamic(matrix);
+            System.out.printf("Function took: %,d nanoseconds\n",
+                    (System.nanoTime() - startTime));
 
             input.close();
         }
@@ -424,33 +434,28 @@ public class tcss343 {
         while (theInput.hasNextLine()) {
             numberOfRows++;
             sb.append(theInput.nextLine());
-            //Changed into two statements if doesnt work.
             sb.append("\n");
         }
 
         int [][] matrix = new int[numberOfRows][numberOfRows];
-//        System.out.println(sb.toString() + numberOfRows);
 
         int row = 0, col = 0;
         int size = sb.toString().toCharArray().length;
         for (int r = 0; r < size; r++) {
             //This will check new line.
             if (sb.charAt(r) == '\n') {
-//                System.out.println();
                 row++;
                 col = 0;
 
-            } else if (sb.charAt(r) == ' ') { //This will check space
-                    //Do nothing
+            } else if (sb.charAt(r) == ' ') {
+                    //if is a space do nothing
             } else if (sb.charAt(r) == 'N') {
                 //This increments past the 'A'.
-//                System.out.print(-1 + " ");
                 matrix[row][col] = -1;
                 //Added a value so increment another spot over.
                 col++;
                 r++;
             } else {
-//                System.out.print(sb.charAt(r) + " ");
                 matrix[row][col] = sb.charAt(r) - '0';
                 col++;
             }
@@ -469,11 +474,16 @@ public class tcss343 {
 
     // 3.5 Testing
     /**
-     * Generate random matrices.
+     * Generate random matrices. If true generate completely random
+     * else false random increasing along columns.
+     * @param isRandom specify to generate completely random or
+     *                 random increasing along columns
+     * @throws IOException if files were not created
      */
-    private static void randomMatrixGenerator() throws IOException {
-//        int[] n = {25, 50, 100, 200, 400, 800};
-        int[] n = {5};
+    private static void randomMatrixGenerator(boolean isRandom)
+            throws IOException {
+        int[] n = {25, 50, 100, 200, 400, 800};
+//        int[] n = {5};
         Random rand = new Random();
         //run through each power of n
         for (int i : n) {
@@ -495,14 +505,17 @@ public class tcss343 {
                     } else if (r >= c) {
                         nthMatrix[r][c] = -1;
                     } else {
-                        //todo: part 1 done but part 2?
-                        nthMatrix[r][c] = rand.nextInt(10);
+                        if (isRandom) {
+                            //part 1 everything is random
+                            nthMatrix[r][c] = rand.nextInt(1000);
+                        } else
+                            //part 2 random except each column is larger than the last
+                            nthMatrix[r][c] = (nthMatrix[r][c-1] + rand.nextInt(1000)) + 1;
                     }
                 }
             }
-            //write the nthMatrix out to file here???
+            //write the nthMatrix out to file here
             for (int r = 0; r < nthMatrix.length; r++) {
-                output.write("\n");
                 for (int c = 0; c < nthMatrix.length; c++) {
                     if (nthMatrix[r][c] == -1) {
                         output.write("NA\t");
@@ -510,6 +523,7 @@ public class tcss343 {
                         output.write(nthMatrix[r][c] + "\t");
                     }
                 }
+                output.write("\n");
             }
             output.flush();
             output.close();
