@@ -4,6 +4,7 @@ Homework 4
 Joshua Atherton | Armoni Atherton
  */
 
+
 import java.util.*;
 import java.io.*;
 
@@ -366,7 +367,7 @@ public class tcss343 {
      * @param args
      * @throws FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         //open file and process from command line arg 0
         int m[][] = null;
         Scanner input = null;
@@ -385,10 +386,8 @@ public class tcss343 {
         //Checks to make sure files were open succesfully.
         if (test) {
             tcss343 tcss = new tcss343();
-                System.out.println("IN the get output");
-                m = getInput(input);
-                System.out.println("OUT the get output");
-
+            randomMatrixGenerator();
+//            m = getInput(input);
 
             // hard coded for now // not needed // for testing
             int[][] matrix = {
@@ -402,15 +401,15 @@ public class tcss343 {
 
 
             // get the solution with the brute force method
-            ArrayList<Integer> bruteResult = tcss.bruteForce(m);
+            ArrayList<Integer> bruteResult = tcss.bruteForce(matrix);
 
             //get the solution with the divide and conquer method
-            tcss.divideAndConquer(m);
+            tcss.divideAndConquer(matrix);
 
             //get the solution with the dynamic method
-            int[] dynamicResult = tcss.dynamic(m);
+            int[] dynamicResult = tcss.dynamic(matrix);
 
-
+            input.close();
         }
     }
 
@@ -474,25 +473,44 @@ public class tcss343 {
     /**
      * Generate random matrices.
      */
-    public static void randomMatrixGenerator() {
-        int[] n = {25, 50, 100, 200, 400, 800};
-
+    public static void randomMatrixGenerator() throws IOException {
+//        int[] n = {25, 50, 100, 200, 400, 800};
+        int[] n = {5};
+        Random rand = new Random();
         //run through each power of n
-        for (int i: n) {
+        for (int i : n) {
+            //This will create the file name.
+            String fileOut = i + "out.txt";
+            BufferedWriter output = null;
+            try {
+                output = new BufferedWriter(new FileWriter(fileOut));
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+
             int[][] nthMatrix = new int[i][i];
             // generate the n-th matrix
             for (int r = 0; r < i; r++) {
                 for (int c = 0; c < i; c++) {
-                    if (r <= c) {
+                    if (r == c) {
                         nthMatrix[r][c] = 0;
+                    } else if (r >= c) {
+                        nthMatrix[r][c] = -1;
                     } else {
                         //todo: part 1 done but part 2?
-                        nthMatrix[r][c] = (int) Math.random();
+                        nthMatrix[r][c] = rand.nextInt(10);
                     }
                 }
             }
             //write the nthMatrix out to file here???
-
+            for (int r = 0; r < nthMatrix.length; r++) {
+                output.write("\n");
+                for (int c = 0; c < nthMatrix.length; c++) {
+                    output.write(nthMatrix[r][c] + "\t");
+                }
+            }
+            output.flush();
+            output.close();
         } // end n-th for loop
     }
 }
