@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+//this version not working but works in tcss343 !!!!!!!
+
 public class bruteForce {
     public static void main(String[] args) {
 //        System.out.println("hello");
@@ -8,6 +10,12 @@ public class bruteForce {
                            {-1, 0, 2, 4},
                            {-1, -1, 0, 2},
                            {-1, -1, -1, 0}};
+        int [][] matrix1 = {
+                {0, 2, 3, 7, 4},
+                {-1, 0, 2, 4, 5},
+                {-1, -1, 0, 2, 1},
+                {-1, -1, -1, 0, 3},
+                {-1, -1, -1, -1, 0}};
 
         //for testing
 //        int [][] matrix = { {0, 2, 2, 1, 15},
@@ -16,7 +24,7 @@ public class bruteForce {
 //                            {-1, -1, -1, 0, 20}};
         //This will get the value (1, 2) which is 1, 1 and 1,2 we want find power set now of these.
         //We dont care about 0,0 and 3,3 because they will always be the beginning and the end.
-        ArrayList<Integer> startingValues = getFirstRow(matrix);
+        ArrayList<Integer> startingValues = getFirstRow(matrix1);
 
 //        ArrayList<Integer> startingValues = new ArrayList<>();
 //        startingValues.add(1);
@@ -31,7 +39,7 @@ public class bruteForce {
             System.out.println("AFTER:" + powerSet.get(i));
         }
 
-        ArrayList<Integer> shortestIndex = getShortestPath(powerSet, matrix);
+        ArrayList<Integer> shortestIndex = getShortestPath(powerSet, matrix1);
         System.out.println("AFTER:" + powerSet.get(shortestIndex.get(1)));
 
         System.out.println("Total Cost: " + shortestIndex.get(0));

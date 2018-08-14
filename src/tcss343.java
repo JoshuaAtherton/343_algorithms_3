@@ -184,7 +184,7 @@ public class tcss343 {
 
         Collections.sort(pathCostsList);
 
-        System.out.println("\nDivide and conquer: optimal cost and path:\n" + pathCostsList.get(0));
+        System.out.println("\nDivide and conquer optimal cost and path:\n" + pathCostsList.get(0));
         for (int i = 1; i < pathCostsList.size(); i++) {
             if (pathCostsList.get(i).getCost() == pathCostsList.get(0).getCost()) {
                 System.out.println(pathCostsList.get(i));
@@ -292,6 +292,14 @@ public class tcss343 {
                 }
             }
         }
+        //todo: remove this when fixed
+        //for testing print out the solution matrix
+        for (int r = 1; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                System.out.print(M[r][c] + " ");
+            }
+            System.out.println();
+        }
 
         // get the path
         path = recoverSolution(M);
@@ -367,7 +375,7 @@ public class tcss343 {
             tcss343 tcss = new tcss343();
 
             //generate the random matrices
-            randomMatrixGenerator(false);
+//            randomMatrixGenerator(false);
 
             inputMatrix = getInput(input);
 
@@ -386,12 +394,12 @@ public class tcss343 {
             ArrayList<Integer> bruteResult = tcss.bruteForce(inputMatrix);
             System.out.printf("Function took: %,d nanoseconds\n",
                     (System.nanoTime() - startTime));
-
-            //get the solution with the divide and conquer method
-            startTime = System.nanoTime();
-            tcss.divideAndConquer(inputMatrix);
-            System.out.printf("Function took: %,d nanoseconds\n",
-                    (System.nanoTime() - startTime));
+//
+//            //get the solution with the divide and conquer method
+//            startTime = System.nanoTime();
+//            tcss.divideAndConquer(inputMatrix);
+//            System.out.printf("Function took: %,d nanoseconds\n",
+//                    (System.nanoTime() - startTime));
 
             //get the solution with the dynamic method
             startTime = System.nanoTime();
@@ -472,8 +480,8 @@ public class tcss343 {
      */
     private static void randomMatrixGenerator(boolean isRandom)
             throws IOException {
-        int[] n = {25, 50, 100, 200, 400, 800};
-//        int[] n = {5};
+//        int[] n = {25, 50, 100, 200, 400, 800};
+        int[] n = {5, 10};
         Random rand = new Random();
         //run through each power of n
         for (int i : n) {

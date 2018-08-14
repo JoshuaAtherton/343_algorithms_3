@@ -24,7 +24,7 @@ public class dynamic {
                 {0, 0, 0, 0, 3},
                 {0, 0, 0, 0, 0}};
 
-        d.generateSolutionMatrix(matrix);
+        d.generateSolutionMatrix(matrix1);
 
     }
 
@@ -58,12 +58,12 @@ public class dynamic {
         }
 
         //print the matrix
-//        for (int r = 0; r < rows; r++) {
-//            for (int c = 0; c < cols; c++) {
-//                System.out.printf("%2d ", M[r][c]);
-//            }
-//            System.out.println();
-//        }
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                System.out.printf("%2d ", M[r][c]);
+            }
+            System.out.println();
+        }
 
         path = recoverSolution(M);
         result = new int[path.length + 1];
@@ -103,7 +103,7 @@ public class dynamic {
             count++;
         }
 
-//        System.out.println(Arrays.toString(path));
+        System.out.println("path: " + Arrays.toString(path));
         return path;
     }
 

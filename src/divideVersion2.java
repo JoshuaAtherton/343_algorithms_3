@@ -42,12 +42,26 @@ public class divideVersion2 {
                 {-1, 0, 2, 4},
                 {-1, -1, 0, 2},
                 {-1, -1, -1, 0}};
+        int [][] matrix1 = {
+                {0, 2, 3, 7, 4},
+                {-1, 0, 2, 4, 5},
+                {-1, -1, 0, 2, 1},
+                {-1, -1, -1, 0, 3},
+                {-1, -1, -1, -1, 0}};
 
         int[] test = {0,1,2,3};
-        ps.getsets(matrix, matrix[0][0], matrix[0].length - 1);
+        ps.getsets(matrix1, 0, matrix1[0].length - 1);
 
         Collections.sort(pathCostsList);
-        System.out.println(pathCostsList.get(0));
+//        System.out.println(pathCostsList.get(0));
+        System.out.println("\nDivide and conquer optimal cost and path:\n" + pathCostsList.get(0));
+        for (int i = 1; i < pathCostsList.size(); i++) {
+            if (pathCostsList.get(i).getCost() == pathCostsList.get(0).getCost()) {
+                System.out.println(pathCostsList.get(i));
+            } else {
+                break;
+            }
+        }
     }
 
     public void getsets(int[][] arr, int start, int end) {
