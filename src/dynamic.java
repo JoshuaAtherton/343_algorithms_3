@@ -10,19 +10,33 @@ public class dynamic {
                 {-1, -1, 0, 2},
                 {-1, -1, -1, 0} };
 
-        int [][] matrix1 = {
-                {0, 2, 3, 7, 4},
-                {-1, 0, 2, 4, 5},
-                {-1, -1, 0, 2, 1},
-                {-1, -1, -1, 0, 3},
-                {-1, -1, -1, -1, 0}};
+//        int [][] matrix1 = {
+//                {0, 2, 3, 7, 4},
+//                {-1, 0, 2, 4, 5},
+//                {-1, -1, 0, 2, 1},
+//                {-1, -1, -1, 0, 3},
+//                {-1, -1, -1, -1, 0}};
 
-        int[][] matrix2 = {
-                {0, 2, 3, 7, 4, 12, 46, 35, 90, 34, 76, 35, 90, 34},
-                {0, 0, 2, 4, 5, 14, 24, 54, 22, 43, 44, 45, 99, 98},
-                {0, 0, 0, 2, 1, 24, 54, 22, 43, 44, 45, 99, 89, 77},
-                {0, 0, 0, 0, 3},
-                {0, 0, 0, 0, 0}};
+        int [][] matrix3 = {
+                {0, 2, 3, 7, 15, 20},
+                {-1, 0, 2, 4, 22, 18},
+                {-1, -1, 0, 2, 9, 30},
+                {-1, -1, -1, 0, 13, 13},
+                {-1, -1, -1, -1, 0, 18},
+                {-1, -1, -1, -1, -1, 0}};
+
+        int[][] matrix1 = {
+                {0, 2, 3, 7, 4, 12, 46, 35, 90, 34},
+                {0, 0, 2, 4, 5, 14, 24, 54, 22, 43},
+                {0, 0, 0, 2, 1, 24, 54, 22, 43, 89},
+                {0, 0, 0, 0, 3, 24, 54, 22, 43, 12},
+                {0, 0, 0, 0, 0, 35, 90, 24, 44, 45},
+                {0, 0, 0, 0, 0, 0, 44, 45, 99, 89},
+                {0, 0, 0, 0, 0, 0, 0, 22, 43, 89},
+                {0, 0, 0, 0, 0, 0, 0, 0, 13, 32},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 67},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
 
         d.generateSolutionMatrix(matrix1);
 
@@ -82,6 +96,39 @@ public class dynamic {
         int j = M[0].length - 1;
 
         while (i > 0 && j > 0) {
+            if (M[i][j] != M[i-1][j]) {
+                S.push(j + 1);
+                j = i;
+                i--;
+            } else {
+               i--;
+            }
+            if (i == 0 || j == 0) {
+                S.push(j + 1);
+            }
+        }
+        S.push(1);
+
+        // reverse the path and store in an array
+        path = new int[S.size()];
+        //pop stack into an array
+        int count = 0;
+        while (!S.isEmpty()) {
+            path[count] = S.pop();
+            count++;
+        }
+
+        System.out.println("path: " + Arrays.toString(path));
+        return path;
+    }
+    /*
+    public int[] recoverSolution(int M[][]) {
+        int[] path = null;
+        Stack<Integer> S = new Stack<>();
+        int i = M.length - 1;
+        int j = M[0].length - 1;
+
+        while (i > 0 && j > 0) {
             if (M[i-1][j] == M[i][j]) {
                 i--;
             } else {
@@ -106,5 +153,6 @@ public class dynamic {
         System.out.println("path: " + Arrays.toString(path));
         return path;
     }
+     */
 
 }

@@ -294,12 +294,12 @@ public class tcss343 {
         }
         //todo: remove this when fixed
         //for testing print out the solution matrix
-        for (int r = 1; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                System.out.print(M[r][c] + " ");
-            }
-            System.out.println();
-        }
+//        for (int r = 1; r < rows; r++) {
+//            for (int c = 0; c < cols; c++) {
+//                System.out.print(M[r][c] + " ");
+//            }
+//            System.out.println();
+//        }
 
         // get the path
         path = recoverSolution(M);
@@ -325,11 +325,12 @@ public class tcss343 {
         int j = M[0].length - 1;
 
         while (i > 0 && j > 0) {
-            if (M[i-1][j] == M[i][j]) {
+            if (M[i][j] != M[i-1][j]) {
+                S.push(j + 1);
+                j = i;
                 i--;
             } else {
-                S.push(j + 1);
-                j--;
+                i--;
             }
             if (i == 0 || j == 0) {
                 S.push(j + 1);
