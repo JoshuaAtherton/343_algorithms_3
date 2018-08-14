@@ -180,11 +180,11 @@ public class tcss343 {
      * overlaps. As before, you need to print the solution, as well as the sequence.
      */
     private void divideAndConquer(int[][] matrix) {
-        divide(matrix, 0, matrix.length - 1);
+        divideGetSets(matrix, 0, matrix.length - 1);
 
         Collections.sort(pathCostsList);
 
-        System.out.println("\nDivide and conquer: optimal cost and path\n" + pathCostsList.get(0));
+        System.out.println("\nDivide and conquer: optimal cost and path:\n" + pathCostsList.get(0));
         for (int i = 1; i < pathCostsList.size(); i++) {
             if (pathCostsList.get(i).getCost() == pathCostsList.get(0).getCost()) {
                 System.out.println(pathCostsList.get(i));
@@ -195,63 +195,47 @@ public class tcss343 {
     }
 
     /**
-     * Take a stack as input and return that stack in the
-     * same order as an array
-     * @param s a stack of integers
-     * @return an array that is equivalent to the stack
+     * Get the powersets of the matrix that is the possible routes
+     * that can be taken to get to the destination end node.
+     * @param arr the 2-d matrix representing the graph
+     * @param start starting node
+     * @param end ending node
      */
-    @SuppressWarnings("unchecked")
-    private int[] stackToArray(Stack<Integer> s) {
-        int[] result = new int[s.size()];
-        Stack<Integer> temp = (Stack<Integer>)s.clone();
-        for(int i = s.size() - 1; i >= 0; i--) {
-            result[i] = temp.pop();
+    public void divideGetSets(int[][] arr, int start, int end) {
+        if (start == end) {
+            s.push(end);
+            int[] path = new int[s.size()];
+            int cost = getCost(arr, s, path);
+            //add the path and cost to the class
+            pathCostsList.add(new pathCost(path, cost));
+            s.pop(); s.pop();
+            return;
         }
-        return result;
+        s.push(start);
+        for (int i = start + 1; i <= end; i++) {
+            divideGetSets(arr, i, end);
+        }
     }
 
     /**
-     *  The cost it will take to travel in the given nodes
-     *  sequence.
-     * @param A the matrix that represents the graph with costs
-     * @param nodes a sequence of nodes
-     * @return the cost to travel that node sequence
+     * Get the cost of the path and convert the stack to an array.
+     * @param A the matrix representing the graph
+     * @param s the stack that holds the path
+     * @param path an array representation of the path
+     * @return integer representing the cost of the path
      */
-    private int getCost(int[][] A, int[] nodes) {
+    @SuppressWarnings("unchecked")
+    public int getCost(int[][] A, Stack<Integer> s, int[] path) {
+        Stack<Integer> temp = (Stack<Integer>)s.clone();
         int cost = 0;
-        for (int i = 0; i < nodes.length - 1; i++) {
-            cost += A[nodes[i]][nodes[i+1]];
+        for(int i = s.size() - 1; i >= 0; i--) {
+            path[i] = temp.pop();
+            if (i > 0) {
+                cost += A[temp.peek()][path[i]];
+            }
         }
         return cost;
     }
-
-    /**
-     * Gets the minimum cost of the graph to go from one
-     * start node to the end node.
-     * @param A the matrix that represents the graph to search
-     * @param start starting node
-     * @param end node to end on (get to)
-     * @return the minimum possible cost
-     */
-    private int divide(int[][] A, int start, int end) {
-        if (start == end) {
-            s.push(end);
-            int[] result = stackToArray(s);
-            int cost = getCost(A, result);
-            pathCostsList.add(new pathCost(result, cost));
-            s.pop(); s.pop();
-            return 0;
-        }
-
-        s.push(start);
-        ArrayList<Integer> costs = new ArrayList<>();
-        for (int i = start + 1; i <= end; i++) {
-            costs.add(A[start][i] + divide(A, i, end));
-        }
-
-        return Collections.min(costs);
-    }
-
 
     //3.3 Dynamic programming
     /**
@@ -383,7 +367,7 @@ public class tcss343 {
             tcss343 tcss = new tcss343();
 
             //generate the random matrices
-//            randomMatrixGenerator(false);
+            randomMatrixGenerator(false);
 
             inputMatrix = getInput(input);
 
@@ -404,10 +388,10 @@ public class tcss343 {
                     (System.nanoTime() - startTime));
 
             //get the solution with the divide and conquer method
-//            startTime = System.nanoTime();
-//            tcss.divideAndConquer(inputMatrix);
-//            System.out.printf("Function took: %,d nanoseconds\n",
-//                    (System.nanoTime() - startTime));
+            startTime = System.nanoTime();
+            tcss.divideAndConquer(inputMatrix);
+            System.out.printf("Function took: %,d nanoseconds\n",
+                    (System.nanoTime() - startTime));
 
             //get the solution with the dynamic method
             startTime = System.nanoTime();
