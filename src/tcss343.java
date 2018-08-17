@@ -30,7 +30,7 @@ public class tcss343 {
     /**
      * This will be our constructor too initialize the
      * class running all the different versions.
-     * @param input
+     * @param input file name to read from
      */
     private tcss343(Scanner input) {
         s = new Stack<>();
@@ -409,15 +409,6 @@ public class tcss343 {
                 }
             }
         }
-        /* //For printing the matrix.
-        for testing print out the solution matrix
-        for (int r = 1; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                System.out.print(M[r][c] + " ");
-            }
-            System.out.println();
-        }
-        */
 
         // get the path
         path = recoverSolution(M);
@@ -435,7 +426,7 @@ public class tcss343 {
      * @param M the solution matrix to recover the shortest path from
      * @return an array representing the shortest path
      */
-    public int[] recoverSolution(int M[][]) {
+    private int[] recoverSolution(int M[][]) {
         int[] path;
         Stack<Integer> S = new Stack<>();
         int i = M.length - 1;
@@ -490,7 +481,7 @@ public class tcss343 {
             tcss343 tcss = new tcss343(input);
             //generate random matrices = true
             //generate random matrices increasing by columns = false;
-            tcss.randomMatrixGenerator(true);
+            randomMatrixGenerator(true);
 
             long startTime;
             //call brute force on input matrix
