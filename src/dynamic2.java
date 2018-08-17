@@ -3,12 +3,24 @@ import java.util.ArrayList;
 public class dynamic2 {
     public static void main(String[] args) {
         dynamic2 d = new dynamic2();
-        int [][] matrix = {
+        int [][] matrix1 = {
                 {0, 2, 3, 7},
                 {-1, 0, 2, 4},
                 {-1, -1, 0, 2},
                 {-1, -1, -1, 0}};
 
+        int[][] matrix = {
+                {0, 2, 3, 7, 4, 12, 46, 35, 90, 34},
+                {0, 0, 2, 4, 5, 14, 24, 54, 22, 43},
+                {0, 0, 0, 2, 1, 24, 54, 22, 43, 89},
+                {0, 0, 0, 0, 3, 24, 54, 22, 43, 12},
+                {0, 0, 0, 0, 0, 35, 90, 24, 44, 45},
+                {0, 0, 0, 0, 0, 0, 44, 45, 99, 89},
+                {0, 0, 0, 0, 0, 0, 0, 22, 43, 89},
+                {0, 0, 0, 0, 0, 0, 0, 0, 13, 32},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 67},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
         int [] sol = d.dynamicSolve(matrix);
 
         for (int i = 0; i < sol.length; i++) {
@@ -23,17 +35,19 @@ public class dynamic2 {
      */
     public int [] dynamicSolve(int [][] matrix) {
         int rowSize = matrix.length;
-        System.out.println(rowSize);
-        int [] solutionMatrix = new int[rowSize + 5];
+//        System.out.println(rowSize);
+        int [] solutionMatrix = new int[rowSize];
 
         for (int r = 1; r < rowSize; r++) {
-            int min = matrix[1][r];
-            for (int c = 1; c < r - 1; c++) {
+            int min = matrix[0][r];
+            for (int c = 1; c < r; c++) {
                 if (solutionMatrix[c] + matrix[c][r] < min) {
                     min = solutionMatrix[c] + matrix[c][r];
+//                    System.out.println(min);
                 }
             }
             solutionMatrix[r] = min;
+//            System.out.println(solutionMatrix[r]);
         }
         return solutionMatrix;
     }

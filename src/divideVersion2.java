@@ -54,9 +54,15 @@ public class divideVersion2 {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 67},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         };
+        int [][] matrix3 = {
+                {0, 2, 20, 80, 90},
+                {-1, 0, 300, 8, 100},
+                {-1, -1, 0, 23, 1222},
+                {-1, -1, -1, 0, 343},
+                {-1, -1, -1, -1, 0}};
 
         int[] test = {0,1,2,3};
-        ps.getsets(matrix1, 0, matrix1[0].length - 1);
+        ps.getsets(matrix3, 0, matrix3[0].length - 1);
 
         Collections.sort(pathCostsList);
 //        System.out.println(pathCostsList.get(0));
