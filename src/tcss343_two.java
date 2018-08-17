@@ -180,22 +180,26 @@ public class tcss343_two {
      * @param set
      * @return
      */
-    private ArrayList<ArrayList<Integer>> getPowersets(int[] set) {
-        ArrayList<ArrayList<Integer>> MainPowerSet = new ArrayList<>();
-        int n = set.length;
+    public ArrayList<ArrayList<Integer>> getPowersets(int[] set) {
 
-        // Run a loop for printing all 2^n, subsets one by obe
-        for (int i = 0; i < (1<<n); i++) {
-            ArrayList<Integer> subPower = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> powerSet = new ArrayList<>();
+        //This will add a empty set.
+        powerSet.add(new ArrayList<Integer>());
 
-            // Print current subset
-            for (int j = 0; j < n; j++)
-                if ((i & (1 << j)) > 0) {
-                    subPower.add(set[j]);
-                }
-            MainPowerSet.add(subPower);
+        //Iterate through each number in the set.
+        for (Integer number : set) {
+            ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
+
+            for (ArrayList<Integer> sub : powerSet) {
+                temp.add(sub);
+
+                ArrayList<Integer> tempSubset = new ArrayList<>(sub);
+                tempSubset.add(number);
+                temp.add(tempSubset);
+            }
+            powerSet = temp;
         }
-        return MainPowerSet;
+        return powerSet;
     }
 
     public int getCostBrute(int[][] A, ArrayList<Integer> powerSets, int[] path) {
