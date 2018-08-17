@@ -6,11 +6,11 @@ public class bruteForce {
     public static void main(String[] args) {
 //        System.out.println("hello");
         //his given one
-        int [][] matrix = {{0, 2, 3, 7},
+        int [][] matrix1 = {{0, 2, 3, 7},
                            {-1, 0, 2, 4},
                            {-1, -1, 0, 2},
                            {-1, -1, -1, 0}};
-        int [][] matrix1 = {
+        int [][] matrix = {
                 {0, 2, 3, 7, 4},
                 {-1, 0, 2, 4, 5},
                 {-1, -1, 0, 2, 1},

@@ -169,9 +169,9 @@ public class tcss343_two {
             System.out.println(Arrays.toString(tempPath) + " " + cost);
             pathCostsBrute.add(new pathCost(tempPath, cost));
         }
-        Collections.sort(pathCostsBrute);
-        System.out.println("Path and cost of Brute force: ");
-        System.out.println(pathCostsBrute.get(0));
+//        Collections.sort(pathCostsBrute);
+//        System.out.println("Path and cost of Brute force: ");
+//        System.out.println(pathCostsBrute.get(0));
 
     }
     /**
@@ -208,7 +208,11 @@ public class tcss343_two {
             path[i+1] = powerSets.get(i);
 
         }
-        cost += A[path.length - 2][path.length - 1];
+        if (path.length < 3 ) {
+            cost += A[0][path[1]];
+        } else {
+            cost += A[path.length - 2][path.length - 1];
+        }
 
         return cost;
     }

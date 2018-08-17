@@ -113,7 +113,7 @@ public class tcss343 {
         int minSubsetIndex = 0;
 
         //Total minimum between all subsets/paths.
-        int minimumCost = 99999999;
+        int minimumCost = 999999;
 
         for (int i = 0; i < powerSet.size(); i++) {
             //This will allow us to update our current index of the smallest path.
