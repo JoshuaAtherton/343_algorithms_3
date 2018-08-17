@@ -1,17 +1,39 @@
+/*
+TCSS - 343 | Summer 2018
+Homework 4
+Joshua Atherton | Armoni Atherton
+ */
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This will be our class holding all of our different implementations
+ * of finding the shortest path for the canoe and rental problem.
+ */
 public class tcss343_two {
+
+    /** This will be used in the divide and conquer. */
     private static Stack<Integer> s;
-    private static ArrayList<pathCost>pathCostsList;
+
+    /** This will be used in divide and conquer, holds path objects. */
+    private static ArrayList<pathCost> pathCostsListDivide;
+
+    /** This will be used in brute force, holds path objects. */
     private static ArrayList<pathCost> pathCostsBrute;
+
+    /** The matrix read in from the command input. */
     private int[][] inputMatrix;
 
-    public tcss343_two(Scanner input) {
+    /**
+     * This will be our constructor too initialize the
+     * class running all the different versions.
+     * @param input
+     */
+    private tcss343_two(Scanner input) {
         s = new Stack<>();
-        pathCostsList = new ArrayList<>();
+        pathCostsListDivide = new ArrayList<>();
         pathCostsBrute = new ArrayList<>();
         //read file input and assign its results to inputMatrix
         inputMatrix = getInput(input);
@@ -25,7 +47,7 @@ public class tcss343_two {
      * @param theInput the current file that is being read in.
      * @return the matrix that will hold the contents of the file.
      */
-    public static int[][] getInput(Scanner theInput)  {
+    private static int[][] getInput(Scanner theInput)  {
 
         StringBuilder sb = new StringBuilder();
         int numberOfRows = 0;
@@ -40,7 +62,6 @@ public class tcss343_two {
         Scanner theFile = new Scanner(sb.toString());
 
         int row = 0, col = 0;
-        int cnt = 0;
         while (theFile.hasNext()) {
             if (theFile.hasNextInt()) {
                 matrix[row][col] = theFile.nextInt();
@@ -125,21 +146,62 @@ public class tcss343_two {
      * Inner class to store the path and cheapest costs of a graph.
      */
     public class pathCost implements Comparable<pathCost> {
+
+        /** This will hold the path taken. */
         private int[] path;
+
+        /** This will be the cost of the path. */
         private int cost;
-        public pathCost(int[] path, int cost) {
+
+        /**
+         * This is our constructor to set of the path array
+         * and the total cost of that path.
+         *
+         * @param path the current path of taken.
+         * @param cost the cost of the current path.
+         */
+        private pathCost(int[] path, int cost) {
             this.path = path;
             this.cost = cost;
         }
+
+        /**
+         * This will increment the cost depeding on
+         * implementation of calculating cost.
+         *
+         * @param cost the current cost.
+         */
         public void incrementCost(int cost) {
             this.cost += cost;
         }
-        public int getCost() {
+
+        /**
+         * This will get the cost of the current
+         * path.
+         *
+         * @return this will return the cost.
+         */
+        private int getCost() {
             return cost;
         }
+
+        /**
+         * This will be used to compare all the different
+         * paths by cost.
+         *
+         * @param pc this will be the current path cost.
+         * @return will return if bigger small or equal.
+         */
         public int compareTo(pathCost pc) {
             return this.cost - pc.getCost();
         }
+
+        /**
+         * This will give a string representation of the
+         * current path and cost.
+         *
+         * @return the current cost and path as a string.
+         */
         public String toString() {
             String display = "Cost of path: [ ";
             for (int i : this.path) {
@@ -153,6 +215,13 @@ public class tcss343_two {
     }
 
     /* ****************** 3.1 Brute Force ********************** */
+
+    /**
+     * This will be the implementation of the canoe and rental problem
+     * using brute force to solve the problem.
+     *
+     * @param matrix this will be the incoming input 2d matrix.
+     */
     private void bruteForce(int[][] matrix) {
         int[] innerNumbers = new int[matrix[0].length - 2];
         ArrayList<ArrayList<Integer>> powerSets; //= new ArrayList<>();
@@ -177,10 +246,10 @@ public class tcss343_two {
     /**
      * This will get the power set.
      *
-     * @param set
-     * @return
+     * @param set the incoming set of numbers.
+     * @return will return the power set.
      */
-    public ArrayList<ArrayList<Integer>> getPowersets(int[] set) {
+    private ArrayList<ArrayList<Integer>> getPowersets(int[] set) {
 
         ArrayList<ArrayList<Integer>> powerSet = new ArrayList<>();
         //This will add a empty set.
@@ -202,7 +271,15 @@ public class tcss343_two {
         return powerSet;
     }
 
-    public int getCostBrute(int[][] A, ArrayList<Integer> powerSets, int[] path) {
+    /**
+     * This will get the cost of the path taken.
+     *
+     * @param A the trading post matrix.
+     * @param powerSets the subset to calculate the cost.
+     * @param path the path we will fill the path.
+     * @return the cost of the path.
+     */
+    private int getCostBrute(int[][] A, ArrayList<Integer> powerSets, int[] path) {
         path[0] = 0;
         path[path.length - 1] = A[0].length - 1;
         int cost = 0;
@@ -230,12 +307,12 @@ public class tcss343_two {
     private void divideAndConquer(int[][] matrix) {
         divideGetSets(matrix, 0, matrix.length - 1);
 
-        Collections.sort(pathCostsList);
+        Collections.sort(pathCostsListDivide);
 
-        System.out.println("\nDivide and conquer optimal cost and path:\n" + pathCostsList.get(0));
-        for (int i = 1; i < pathCostsList.size(); i++) {
-            if (pathCostsList.get(i).getCost() == pathCostsList.get(0).getCost()) {
-                System.out.println(pathCostsList.get(i));
+        System.out.println("\nDivide and conquer optimal cost and path:\n" + pathCostsListDivide.get(0));
+        for (int i = 1; i < pathCostsListDivide.size(); i++) {
+            if (pathCostsListDivide.get(i).getCost() == pathCostsListDivide.get(0).getCost()) {
+                System.out.println(pathCostsListDivide.get(i));
             } else {
                 break;
             }
@@ -248,13 +325,13 @@ public class tcss343_two {
      * @param start starting node
      * @param end ending node
      */
-    public void divideGetSets(int[][] arr, int start, int end) {
+    private void divideGetSets(int[][] arr, int start, int end) {
         if (start == end) {
             s.push(end);
             int[] path = new int[s.size()];
-            int cost = getCost(arr, s, path);
+            int cost = getCostDivide(arr, s, path);
             //add the path and cost to the class
-            pathCostsList.add(new pathCost(path, cost));
+            pathCostsListDivide.add(new pathCost(path, cost));
             s.pop(); s.pop();
             return;
         }
@@ -271,7 +348,7 @@ public class tcss343_two {
      * @return integer representing the cost of the path
      */
     @SuppressWarnings("unchecked")
-    public int getCost(int[][] A, Stack<Integer> s, int[] path) {
+    private int getCostDivide(int[][] A, Stack<Integer> s, int[] path) {
         Stack<Integer> temp = (Stack<Integer>)s.clone();
         int cost = 0;
         for(int i = s.size() - 1; i >= 0; i--) {
@@ -292,8 +369,6 @@ public class tcss343_two {
      * the corresponding dynamic programming solution.
      *
      * @param matrix represents the graph of destinations and costs
-     * @return an array where index one is the cost and what
-     *         follows is the shortest path
      */
     private void dynamic(int [][] matrix) {
         int[] solution = generateSolutionMatrix(matrix);
@@ -335,14 +410,15 @@ public class tcss343_two {
                 }
             }
         }
-        //todo: remove this when fixed
-        //for testing print out the solution matrix
-//        for (int r = 1; r < rows; r++) {
-//            for (int c = 0; c < cols; c++) {
-//                System.out.print(M[r][c] + " ");
-//            }
-//            System.out.println();
-//        }
+        /* //For printing the matrix.
+        for testing print out the solution matrix
+        for (int r = 1; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                System.out.print(M[r][c] + " ");
+            }
+            System.out.println();
+        }
+        */
 
         // get the path
         path = recoverSolution(M);
@@ -392,7 +468,15 @@ public class tcss343_two {
         return path;
     }
 
-
+    /**
+     * This will be used to run our program allowing us to
+     * take input from the command line putting it into a matrix and
+     * finding the shortest path using brute force, Divide and Conquer, and
+     * Dynamic programming.
+     *
+     * @param Args the incoming command line input.
+     * @throws IOException will throw a exception if file is not found.
+     */
     public static void main (String[] Args) throws IOException {
         //get input file from consoleScanner input = null;
         Boolean fileFound = false;
@@ -405,7 +489,8 @@ public class tcss343_two {
         }
         if (fileFound) {
            tcss343_two tcss = new tcss343_two(input);
-            //generate random matrices
+            //generate random matrices = true
+            //generate random matrices increasing by columns = false;
            tcss.randomMatrixGenerator(true);
 
            long startTime;
