@@ -6,11 +6,13 @@ import java.util.*;
 public class tcss343_two {
     private static Stack<Integer> s;
     private static ArrayList<pathCost>pathCostsList;
+    private static ArrayList<pathCost> pathCostsBrute;
     private int[][] inputMatrix;
 
     public tcss343_two(Scanner input) {
         s = new Stack<>();
         pathCostsList = new ArrayList<>();
+        pathCostsBrute = new ArrayList<>();
         //read file input and assign its results to inputMatrix
         inputMatrix = getInput(input);
 
@@ -61,7 +63,7 @@ public class tcss343_two {
         return matrix;
     }
 
-    // 3.5 Testing
+    /* **************** 3.5 Testing generate random matrices ********** */
     /**
      * Generate random matrices. If true generate completely random
      * else false random increasing along columns.
@@ -119,11 +121,6 @@ public class tcss343_two {
         } // end n-th for loop
     }
 
-    /* ****************** 3.1 Brute Force ********************** */
-
-
-
-    /* ****************** 3.2 Divide and conquer ********************** */
     /**
      * Inner class to store the path and cheapest costs of a graph.
      */
@@ -144,9 +141,8 @@ public class tcss343_two {
             return this.cost - pc.getCost();
         }
         public String toString() {
-            String display = "Cost of path: [";
+            String display = "Cost of path: [ ";
             for (int i : this.path) {
-                display += " ";
                 display += i + 1;
                 display += " ";
             }
@@ -155,6 +151,66 @@ public class tcss343_two {
             return display;
         }
     }
+
+    /* ****************** 3.1 Brute Force ********************** */
+    private void bruteForce(int[][] matrix) {
+        int[] innerNumbers = new int[matrix[0].length - 2];
+        ArrayList<ArrayList<Integer>> powerSets; //= new ArrayList<>();
+        for (int i = 1; i < matrix[0].length - 1; i++) {
+            innerNumbers[i - 1] = i;
+        }
+//        System.out.println(Arrays.toString(innerNumbers));
+        //get powersets
+        powerSets = getPowersets(innerNumbers);
+//        System.out.println(powerSets);
+        for (int i = 0; i < powerSets.size(); i++) {
+            int[] tempPath = new int[powerSets.get(i).size() + 2];
+            int cost = getCostBrute(matrix, powerSets.get(i), tempPath);
+            System.out.println(Arrays.toString(tempPath) + " " + cost);
+        }
+
+    }
+    /**
+     * This will get the power set.
+     *
+     * @param set
+     * @return
+     */
+    private ArrayList<ArrayList<Integer>> getPowersets(int[] set) {
+        ArrayList<ArrayList<Integer>> MainPowerSet = new ArrayList<>();
+        int n = set.length;
+
+        // Run a loop for printing all 2^n, subsets one by obe
+        for (int i = 0; i < (1<<n); i++) {
+            ArrayList<Integer> subPower = new ArrayList<>();
+
+            // Print current subset
+            for (int j = 0; j < n; j++)
+                if ((i & (1 << j)) > 0) {
+                    subPower.add(set[j]);
+                }
+            MainPowerSet.add(subPower);
+        }
+        return MainPowerSet;
+    }
+
+    public int getCostBrute(int[][] A, ArrayList<Integer> powerSets, int[] path) {
+        path[0] = 0;
+        path[path.length - 1] = A[0].length - 1;
+        int cost = 0;
+        System.out.println("Powersets: " + powerSets);
+        for(int i = 0; i < powerSets.size(); i++) {
+            cost += A[path[i]][powerSets.get(i)];
+            path[i+1] = powerSets.get(i);
+        }
+        cost += A[path.length - 2][path.length - 1];
+
+        return cost;
+    }
+
+
+
+    /* ****************** 3.2 Divide and conquer ********************** */
     /**
      *Express the problem with a purely divide-and-conquer approach.
      * Implement a recursive algorithm for the problem.
@@ -234,13 +290,12 @@ public class tcss343_two {
         int[] solution = generateSolutionMatrix(matrix);
 
         System.out.println("\nDynamic implementation path and cost: ");
-        System.out.println("Cost: " + solution[0]);
-        System.out.printf("Path: [%d", solution[1]);
+        System.out.printf("Cost of path: [ %d", solution[1]);
         for(int i = 2; i < solution.length; i++) {
-            System.out.print(" -> ");
+            System.out.print(" ");
             System.out.print(solution[i]);
         }
-        System.out.printf("] = %d\n", solution[0]);
+        System.out.printf(" ] = %d\n", solution[0]);
     }
     /**
      * Returns an array where first element is the cost and remaining elements are the path.
@@ -346,6 +401,10 @@ public class tcss343_two {
 
            long startTime;
             //call brute force on input matrix
+            startTime = System.nanoTime();
+            tcss.bruteForce(tcss.inputMatrix);
+            System.out.printf("Function took: %,d nanoseconds\n",
+                    (System.nanoTime() - startTime));
 
             //call divide and conquer on on input matrix
             startTime = System.nanoTime();
