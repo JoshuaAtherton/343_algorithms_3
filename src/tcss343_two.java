@@ -167,7 +167,11 @@ public class tcss343_two {
             int[] tempPath = new int[powerSets.get(i).size() + 2];
             int cost = getCostBrute(matrix, powerSets.get(i), tempPath);
             System.out.println(Arrays.toString(tempPath) + " " + cost);
+            pathCostsBrute.add(new pathCost(tempPath, cost));
         }
+        Collections.sort(pathCostsBrute);
+        System.out.println("Path and cost of Brute force: ");
+        System.out.println(pathCostsBrute.get(0));
 
     }
     /**
@@ -202,6 +206,7 @@ public class tcss343_two {
         for(int i = 0; i < powerSets.size(); i++) {
             cost += A[path[i]][powerSets.get(i)];
             path[i+1] = powerSets.get(i);
+
         }
         cost += A[path.length - 2][path.length - 1];
 
